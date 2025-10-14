@@ -13,7 +13,7 @@ const Navbar: React.FC = () => {
       {/* Top Green Info Bar */}
       <div className="top-bar">
         <div className="top-left">
-          <span>
+          <span className="cellphone">
             <CiPhone />
             +056-23485
           </span>
@@ -23,12 +23,12 @@ const Navbar: React.FC = () => {
           <a href="#">Shop Now</a>
         </div>
         <div className="top-right">
-          <span>
+          <span className="eng">
             Eng
             <RiArrowDropDownLine />
           </span>
           <span className="divider">|</span>
-          <span>
+          <span className="nep">
             Nepal
             <RiArrowDropDownLine />
           </span>

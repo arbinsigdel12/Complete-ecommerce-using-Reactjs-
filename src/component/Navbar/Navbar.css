@@ -50,16 +50,47 @@ body {
   color: #fff;
 }
 
-.top-right span {
-  margin-left: 8px;
+.top-left {
+  position: relative;
 }
 
+.top-left .cellphone {
+  font-size: 1rem;
+}
+.top-left .cellphone svg {
+  position: absolute;
+  top: 10%;
+  left: -20px;
+}
+
+.top-right {
+  position: relative;
+}
+.top-right .eng {
+  margin-left: 8px;
+  margin-right: 20px;
+}
+
+.top-right .eng svg {
+  position: absolute;
+  top: 0px;
+  left: 26%;
+  font-size: 20px;
+}
 .top-right .divider {
   color: #ccc;
   font-weight: 1000;
 }
+.top-right .nep {
+  margin-left: 10px;
+  margin-right: 20px;
+}
 
-.top-right svg {
+.top-right .nep svg {
+  position: absolute;
+  top: 0px;
+  left: 82%;
+  font-size: 20px;
 }
 
 /* --------- Main Navbar --------- */
