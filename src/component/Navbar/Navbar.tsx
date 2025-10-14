@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./Navbar.css";
 import van from "../../assets/Images/van.webp";
 import { FaSearch } from "react-icons/fa";
@@ -8,6 +8,7 @@ import { CiPhone } from "react-icons/ci";
 
 const Navbar: React.FC = () => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const selectRef = useRef<HTMLSelectElement>(null);
 
   const handleSearchFocus = () => {
     setIsSearchFocused(true);
@@ -17,8 +18,40 @@ const Navbar: React.FC = () => {
     setTimeout(() => setIsSearchFocused(false), 200);
   };
 
+  const handleOverlayClick = () => {
+    setIsSearchFocused(false);
+  };
+
+  // Update select width based on selected option
+  useEffect(() => {
+    const select = selectRef.current;
+    if (!select) return;
+
+    const updateSelectWidth = () => {
+      const option = select.options[select.selectedIndex];
+      const temp = document.createElement("select");
+      const tempOption = document.createElement("option");
+      tempOption.textContent = option.text;
+      temp.appendChild(tempOption);
+      document.body.appendChild(temp);
+      select.style.width = `${temp.scrollWidth + 20}px`;
+      document.body.removeChild(temp);
+    };
+
+    updateSelectWidth();
+    select.addEventListener("change", updateSelectWidth);
+
+    return () => select.removeEventListener("change", updateSelectWidth);
+  }, []);
+
   return (
     <>
+      {/* Search Overlay */}
+      <div
+        className={`search-overlay ${isSearchFocused ? "visible" : ""}`}
+        onClick={handleOverlayClick}
+      />
+
       {/* Top Green Info Bar */}
       <div className="top-bar">
         <div className="top-left">
@@ -55,7 +88,7 @@ const Navbar: React.FC = () => {
         </div>
 
         <div className="search-section">
-          <select>
+          <select ref={selectRef}>
             <option>All</option>
             <option>Electronics</option>
             <option>Jewellery</option>
