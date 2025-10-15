@@ -11,14 +11,17 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({ isMobile = false }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const selectRef = useRef<HTMLSelectElement>(null);
 
+  //set search hint to active
   const handleSearchFocus = () => {
     setIsSearchFocused(true);
   };
 
+  //event to set timeout of search hint
   const handleSearchBlur = () => {
     setTimeout(() => setIsSearchFocused(false), 0);
   };
 
+  // function to handle search hint clicks
   const handleSearchHintClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (inputRef.current) {
@@ -26,10 +29,12 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({ isMobile = false }) => {
     }
   };
 
+  //close search hint on overlay clicked
   const handleOverlayClick = () => {
     setIsSearchFocused(false);
   };
 
+  // function to handle width of select
   const adjustSelectWidth = (select: HTMLSelectElement | null) => {
     if (!select) return;
     const option = select.options[select.selectedIndex];
@@ -40,6 +45,7 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({ isMobile = false }) => {
     document.body.removeChild(temp);
   };
 
+  // Ajdust select width according to catagory width
   useEffect(() => {
     const select = selectRef.current;
     if (!select) return;
