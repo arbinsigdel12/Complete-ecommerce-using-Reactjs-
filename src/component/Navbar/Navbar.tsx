@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./Navbar.css";
-import van from "../../assets/Images/van.webp";
-import { FaSearch, FaBars, FaTimes } from "react-icons/fa";
+import van from "../../../public/assets/Images/van.webp";
+import { FaBars, FaTimes } from "react-icons/fa";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { LiaCartPlusSolid } from "react-icons/lia";
 import { CiPhone } from "react-icons/ci";
+import NavbarSearch from "./NavbarSearch";
 
 const Navbar: React.FC = () => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -24,9 +25,8 @@ const Navbar: React.FC = () => {
 
   const handleSearchHintClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    // Focus back on search input when hint is clicked
     const input = document.querySelector(
-      ".search-section input, .search-section-mobile input"
+      ".search-wrapper input"
     ) as HTMLInputElement;
     if (input) {
       input.focus();
@@ -68,7 +68,6 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
-  // Close mobile menu when clicking on overlay
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -84,7 +83,6 @@ const Navbar: React.FC = () => {
     return () => document.removeEventListener("click", handleClickOutside);
   }, [isMobileMenuOpen]);
 
-  // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -104,7 +102,6 @@ const Navbar: React.FC = () => {
         onClick={handleOverlayClick}
       />
 
-      {/* Mobile Menu Overlay */}
       <div
         className={`mobile-menu-overlay ${isMobileMenuOpen ? "active" : ""}`}
         onClick={closeMobileMenu}
@@ -139,7 +136,6 @@ const Navbar: React.FC = () => {
       </div>
 
       <nav className="navbar">
-        {/* Mobile Menu Button */}
         <div className="logowrapper">
           <button
             className="mobile-menu-toggle"
@@ -157,31 +153,13 @@ const Navbar: React.FC = () => {
           </div>
         </div>
 
-        {/* Desktop Search */}
-        <div className="search-section">
-          <select ref={selectRefDesktop}>
-            <option>All</option>
-            <option>Electronics</option>
-            <option>Jewellery</option>
-            <option>Men's Clothing</option>
-            <option>Women's Clothing</option>
-          </select>
-          <input
-            type="text"
-            placeholder="Search products..."
-            onFocus={handleSearchFocus}
-            onBlur={handleSearchBlur}
-          />
-          <button className="search-btn">
-            <FaSearch />
-          </button>
-          <div
-            className={`search-hint ${isSearchFocused ? "visible" : ""}`}
-            onMouseDown={handleSearchHintClick}
-          >
-            Start typing to search...
-          </div>
-        </div>
+        <NavbarSearch
+          selectRef={selectRefDesktop}
+          isSearchFocused={isSearchFocused}
+          onSearchFocus={handleSearchFocus}
+          onSearchBlur={handleSearchBlur}
+          onSearchHintClick={handleSearchHintClick}
+        />
 
         <div className="account-section">
           <div className="account">
@@ -192,39 +170,21 @@ const Navbar: React.FC = () => {
             <LiaCartPlusSolid />
             <span>Cart</span>
             <div className="counter-circle">
-              <span>1</span>
+              <p className="cart-counter">1</p>
             </div>
           </div>
         </div>
       </nav>
 
-      {/* Mobile Search */}
-      <div className="search-section-mobile">
-        <select ref={selectRefMobile}>
-          <option>All</option>
-          <option>Electronics</option>
-          <option>Jewellery</option>
-          <option>Men's Clothing</option>
-          <option>Women's Clothing</option>
-        </select>
-        <input
-          type="text"
-          placeholder="Search products..."
-          onFocus={handleSearchFocus}
-          onBlur={handleSearchBlur}
-        />
-        <button className="search-btn">
-          <FaSearch />
-        </button>
-        <div
-          className={`search-hint ${isSearchFocused ? "visible" : ""}`}
-          onMouseDown={handleSearchHintClick}
-        >
-          Start typing to search...
-        </div>
-      </div>
+      <NavbarSearch
+        isMobile={true}
+        selectRef={selectRefMobile}
+        isSearchFocused={isSearchFocused}
+        onSearchFocus={handleSearchFocus}
+        onSearchBlur={handleSearchBlur}
+        onSearchHintClick={handleSearchHintClick}
+      />
 
-      {/* Mobile Menu */}
       <div className={`mobile-menu ${isMobileMenuOpen ? "active" : ""}`}>
         <div className="mobile-menu-header">
           <h3>Menu</h3>

@@ -1,0 +1,28 @@
+/* ========== Global Variables ========== */
+:root {
+  --primary-color: #034c2c;
+  --secondary-color: #007b3d;
+  --accent-color: #90ee90;
+  --text-color: #333;
+  --bg-color: #ffffff;
+  --muted-bg: #f6f6f6;
+  --divider-color: #ddd;
+  --light-text: #a0f0a0;
+  --font-family: "Poppins", sans-serif;
+  --navbar-height: 60px;
+  --mobile-nav-height: 60px;
+}
+
+/* ========== Global Reset ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: var(--font-family);
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.5;
+}
