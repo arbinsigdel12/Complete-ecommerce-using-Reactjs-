@@ -28,6 +28,7 @@
 
 .search-section:focus-within,
 .search-section-mobile:focus-within {
+  border-radius: 10px 10px 0 0;
   border-color: transparent;
   box-shadow: 0 0 0 2px var(--accent-color);
 }
@@ -82,10 +83,10 @@
 .search-wrapper .search-hint {
   position: absolute;
   top: 100%;
-  left: 0;
-  width: 100%;
+  left: -2px;
+  width: 100.5%;
   background: #fff;
-  border: 1px solid var(--divider-color);
+  border: 1px solid var(--accent-color);
   border-radius: 0 0 10px 10px;
   border-top: none;
   padding: 12px;
