@@ -18,6 +18,7 @@ const Navbar: React.FC = () => {
     setIsMobileMenuOpen(false);
   };
 
+  //Close menu sidebar when clicked to overlay
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -33,6 +34,7 @@ const Navbar: React.FC = () => {
     return () => document.removeEventListener("click", handleClickOutside);
   }, [isMobileMenuOpen]);
 
+  // Make overlay not scrollable when sidebar is active
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = "hidden";
