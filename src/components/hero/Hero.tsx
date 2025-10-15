@@ -8,9 +8,7 @@ function Hero() {
       <section>
         <div className="hero">
           <div className="hero-left">
-            <div className="hero heading">
-              <h2>Shopping And Department Store</h2>
-            </div>
+            <h2>Shopping And Department Store</h2>
             <div className="hero-description">
               <p>
                 Shopping is a bit of a relaxing hobby for me, which is sometimes

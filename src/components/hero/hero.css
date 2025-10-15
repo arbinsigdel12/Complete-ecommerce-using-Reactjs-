@@ -27,14 +27,15 @@ section {
 
 .hero-left {
   flex: 1;
+  padding: 0 10px 0 10px;
 }
-
 .hero-left h2 {
   font-size: 3.3rem;
   font-weight: 700;
   color: var(--primary-green);
-  line-height: 1.2;
+  line-height: 1;
   margin-bottom: 25px;
+  text-align: start;
 }
 
 .hero-description p {
@@ -131,16 +132,26 @@ section {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    text-align: center;
   }
-
   .hero-button {
-    justify-content: center;
+    justify-content: start;
+    white-space: nowrap;
   }
   .hero-left h2 {
     font-size: 2.5rem;
   }
   .hero-right img {
     max-width: 80%;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-right {
+    display: none;
+  }
+
+  .hero-button {
+    flex-direction: column;
+    align-items: start;
   }
 }
