@@ -139,7 +139,7 @@
   background: var(--muted-bg);
   border-radius: 10px;
   height: 44px;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   margin: 0 20px;
   flex: 1;
   max-width: 1000px;
@@ -156,11 +156,13 @@
   background: transparent;
   border-radius: 10px;
   overflow: hidden;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .search-section:focus-within,
 .search-section-mobile:focus-within {
-  border: 1px solid var(--accent-color);
+  border-color: transparent;
+  box-shadow: 0 0 0 2px var(--accent-color);
 }
 
 .search-section select,
