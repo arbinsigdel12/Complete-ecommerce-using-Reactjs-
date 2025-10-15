@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./Navbar.css";
 import van from "../../../public/assets/Images/van.webp";
 import { FaBars, FaTimes } from "react-icons/fa";
@@ -9,8 +9,6 @@ import NavbarSearch from "../NavbarSearch/NavbarSearch";
 
 const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const selectRefDesktop = useRef<HTMLSelectElement>(null);
-  const selectRefMobile = useRef<HTMLSelectElement>(null);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -19,33 +17,6 @@ const Navbar: React.FC = () => {
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
   };
-
-  const adjustWidth = (select: HTMLSelectElement | null) => {
-    if (!select) return;
-    const option = select.options[select.selectedIndex];
-    const temp = document.createElement("span");
-    temp.style.visibility = "hidden";
-    temp.style.whiteSpace = "nowrap";
-    temp.style.font = window.getComputedStyle(select).font;
-    temp.textContent = option.text;
-    document.body.appendChild(temp);
-    select.style.width = `${temp.offsetWidth + 40}px`;
-    document.body.removeChild(temp);
-  };
-
-  useEffect(() => {
-    const selects = [selectRefDesktop.current, selectRefMobile.current];
-    selects.forEach((sel) => {
-      if (!sel) return;
-      adjustWidth(sel);
-      sel.addEventListener("change", () => adjustWidth(sel));
-    });
-    return () => {
-      selects.forEach((sel) =>
-        sel?.removeEventListener("change", () => adjustWidth(sel))
-      );
-    };
-  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -127,7 +98,7 @@ const Navbar: React.FC = () => {
           </div>
         </div>
 
-        <NavbarSearch selectRef={selectRefDesktop} />
+        <NavbarSearch />
 
         <div className="account-section">
           <div className="account">
@@ -144,7 +115,7 @@ const Navbar: React.FC = () => {
         </div>
       </nav>
 
-      <NavbarSearch isMobile={true} selectRef={selectRefMobile} />
+      <NavbarSearch isMobile={true} />
 
       <div className={`mobile-menu ${isMobileMenuOpen ? "active" : ""}`}>
         <div className="mobile-menu-header">

@@ -1,20 +1,3 @@
-/* --------- Search Overlay --------- */
-.search-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 10;
-  display: none;
-  cursor: pointer;
-}
-
-.search-overlay.visible {
-  display: block;
-}
-
 /* --------- Top Green Bar --------- */
 .top-bar {
   background-color: #002d1b;
