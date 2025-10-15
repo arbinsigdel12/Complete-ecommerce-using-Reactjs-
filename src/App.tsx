@@ -1,4 +1,4 @@
-import Navbar from "./component/Navbar/Navbar.tsx";
+import Navbar from "./components/Navbar/Navbar.tsx";
 
 function App() {
   return (

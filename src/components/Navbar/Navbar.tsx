@@ -50,7 +50,7 @@ const Navbar: React.FC = () => {
     temp.style.font = window.getComputedStyle(select).font;
     temp.textContent = option.text;
     document.body.appendChild(temp);
-    select.style.width = `${temp.offsetWidth + 35}px`;
+    select.style.width = `${temp.offsetWidth + 40}px`;
     document.body.removeChild(temp);
   };
 
@@ -196,7 +196,10 @@ const Navbar: React.FC = () => {
             <FaTimes />
           </button>
         </div>
+
         <div className="mobile-menu-items">
+          <h4 className="mobile-menu-subheading">Categories</h4>
+
           <ul>
             <li onClick={closeMobileMenu}>All</li>
             <li onClick={closeMobileMenu}>Electronics</li>
