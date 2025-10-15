@@ -5,33 +5,12 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { LiaCartPlusSolid } from "react-icons/lia";
 import { CiPhone } from "react-icons/ci";
-import NavbarSearch from "./NavbarSearch";
+import NavbarSearch from "../NavbarSearch/NavbarSearch";
 
 const Navbar: React.FC = () => {
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const selectRefDesktop = useRef<HTMLSelectElement>(null);
   const selectRefMobile = useRef<HTMLSelectElement>(null);
-
-  const handleSearchFocus = () => setIsSearchFocused(true);
-
-  const handleSearchBlur = () => {
-    setTimeout(() => setIsSearchFocused(false), 200);
-  };
-
-  const handleOverlayClick = () => {
-    setIsSearchFocused(false);
-  };
-
-  const handleSearchHintClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const input = document.querySelector(
-      ".search-wrapper input"
-    ) as HTMLInputElement;
-    if (input) {
-      input.focus();
-    }
-  };
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -98,11 +77,6 @@ const Navbar: React.FC = () => {
   return (
     <>
       <div
-        className={`search-overlay ${isSearchFocused ? "visible" : ""}`}
-        onClick={handleOverlayClick}
-      />
-
-      <div
         className={`mobile-menu-overlay ${isMobileMenuOpen ? "active" : ""}`}
         onClick={closeMobileMenu}
       />
@@ -153,13 +127,7 @@ const Navbar: React.FC = () => {
           </div>
         </div>
 
-        <NavbarSearch
-          selectRef={selectRefDesktop}
-          isSearchFocused={isSearchFocused}
-          onSearchFocus={handleSearchFocus}
-          onSearchBlur={handleSearchBlur}
-          onSearchHintClick={handleSearchHintClick}
-        />
+        <NavbarSearch selectRef={selectRefDesktop} />
 
         <div className="account-section">
           <div className="account">
@@ -176,14 +144,7 @@ const Navbar: React.FC = () => {
         </div>
       </nav>
 
-      <NavbarSearch
-        isMobile={true}
-        selectRef={selectRefMobile}
-        isSearchFocused={isSearchFocused}
-        onSearchFocus={handleSearchFocus}
-        onSearchBlur={handleSearchBlur}
-        onSearchHintClick={handleSearchHintClick}
-      />
+      <NavbarSearch isMobile={true} selectRef={selectRefMobile} />
 
       <div className={`mobile-menu ${isMobileMenuOpen ? "active" : ""}`}>
         <div className="mobile-menu-header">

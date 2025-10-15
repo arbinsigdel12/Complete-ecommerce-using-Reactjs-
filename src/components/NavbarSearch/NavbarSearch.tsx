@@ -1,27 +1,37 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import { FaSearch } from "react-icons/fa";
 import "./NavbarSearch.css";
 
 interface NavbarSearchProps {
   isMobile?: boolean;
   selectRef: React.RefObject<HTMLSelectElement | null>;
-  isSearchFocused: boolean;
-  onSearchFocus: () => void;
-  onSearchBlur: () => void;
-  onSearchHintClick: (e: React.MouseEvent) => void;
 }
 
 const NavbarSearch: React.FC<NavbarSearchProps> = ({
   isMobile = false,
   selectRef,
-  isSearchFocused,
-  onSearchFocus,
-  onSearchBlur,
-  onSearchHintClick,
 }) => {
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleSearchFocus = () => {
+    setIsSearchFocused(true);
+  };
+
+  const handleSearchBlur = () => {
+    setTimeout(() => setIsSearchFocused(false), 0);
+  };
+
+  const handleSearchHintClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
   return (
     <div className={`search-wrapper ${isMobile ? "mobile-visible" : ""}`}>
-      <div className={isMobile ? "search-section-mobile" : "search-section"}>
+      <div className="search-section">
         <select ref={selectRef}>
           <option>All</option>
           <option>Electronics</option>
@@ -30,10 +40,11 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({
           <option>Women's Clothing</option>
         </select>
         <input
+          ref={inputRef}
           type="text"
           placeholder="Search products..."
-          onFocus={onSearchFocus}
-          onBlur={onSearchBlur}
+          onFocus={handleSearchFocus}
+          onBlur={handleSearchBlur}
         />
         <button className="search-btn">
           <FaSearch />
@@ -41,7 +52,7 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({
       </div>
       <div
         className={`search-hint ${isSearchFocused ? "visible" : ""}`}
-        onMouseDown={onSearchHintClick}
+        onMouseDown={handleSearchHintClick}
       >
         Start typing to search...
       </div>
