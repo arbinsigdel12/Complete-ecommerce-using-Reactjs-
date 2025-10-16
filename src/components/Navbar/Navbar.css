@@ -69,12 +69,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 25px;
+  padding: 12px 24px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   position: sticky;
   top: 0;
   height: var(--navbar-height);
-  z-index: 10;
+  z-index: 950;
 }
 
 /* Left Section: Logo + Hamburger */
@@ -128,9 +128,8 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
   transition: color 0.3s ease, transform 0.3s ease;
-  padding: 5px 8px;
+  padding: 5px 4px;
   border-radius: 6px;
   height: 100%;
   justify-content: center;
@@ -205,7 +204,7 @@
     opacity: 0.6;
   }
   100% {
-    transform: translate(-50%, -50%) scale(2);
+    transform: translate(-50%, -50%) scale(1.6);
     opacity: 0;
   }
 }
@@ -419,12 +418,13 @@
     font-size: 12px;
   }
 
-  .top-center-mobile span {
-    display: none;
+  .top-center-mobile a {
+    margin-left: 10px;
   }
 
-  .top-center-mobile a {
-    margin-left: 0;
+  .navbar {
+    padding: 0px;
+    margin: 10px;
   }
 
   .logo-section img {

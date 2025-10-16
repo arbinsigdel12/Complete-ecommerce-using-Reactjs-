@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
-import "./NavbarSearch.css";
+import "./navbarSearch.css";
 
 interface NavbarSearchProps {
   isMobile?: boolean;

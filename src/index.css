@@ -1,5 +1,6 @@
 /* ========== Global Variables ========== */
 :root {
+  /*====== Navbar variables =====*/
   --primary-color: #034c2c;
   --secondary-color: #007b3d;
   --accent-color: #90ee90;
@@ -11,6 +12,13 @@
   --font-family: "Poppins", sans-serif;
   --navbar-height: 60px;
   --mobile-nav-height: 60px;
+
+  /*====== Hero Section variables =====*/
+  --primary-green: #0d5030;
+  --light-green: #004e2d;
+  --button-green: #04391f;
+  --text-color: #0c4027;
+  --white: #fff;
 }
 
 /* ========== Global Reset ========== */
@@ -23,6 +31,5 @@
 
 body {
   background-color: var(--bg-color);
-  color: var(--text-color);
   line-height: 1.5;
 }
