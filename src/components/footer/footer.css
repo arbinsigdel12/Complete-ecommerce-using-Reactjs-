@@ -20,6 +20,7 @@
 
 .logo a {
   color: white;
+  transition: transform 0.3s ease;
 }
 
 .logo a:hover {
@@ -30,8 +31,6 @@
 @media (max-width: 860px) {
   .footer {
     font-size: 0.75rem;
-  }
-  .logo {
-    font-size: 1.5rem;
+    padding: 50px 20px 50px 20px;
   }
 }
