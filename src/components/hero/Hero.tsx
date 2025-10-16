@@ -1,6 +1,6 @@
 import "./hero.css";
 import { BsArrowRightCircle } from "react-icons/bs";
-import LandingSvg from "../../../public/assets/Hero/landingSVG.svg";
+import LandingSvg from "../../../public/assets/Images/hero/landingSVG.svg";
 
 function Hero() {
   return (

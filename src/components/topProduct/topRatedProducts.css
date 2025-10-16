@@ -1,3 +1,6 @@
+.carousel-btn.hidden {
+  display: none;
+}
 .loader-container {
   display: flex;
   flex-direction: column;
@@ -59,7 +62,7 @@
   scroll-behavior: smooth;
   gap: 20px;
   padding: 10px;
-  user-select: none; /* Prevent text selection during drag */
+  user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
