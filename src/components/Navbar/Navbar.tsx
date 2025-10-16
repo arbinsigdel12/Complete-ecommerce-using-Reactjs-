@@ -77,7 +77,7 @@ const Navbar: React.FC = () => {
           </select>
         </div>
         <div className="top-center-mobile">
-          <span>Get 50% off on selected items |</span>
+          <span>Get 50% off on selected items | </span>
           <a href="#">Shop Now</a>
         </div>
       </div>

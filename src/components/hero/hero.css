@@ -40,6 +40,7 @@ section {
 .hero-button {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 20px;
 }
 
@@ -126,7 +127,6 @@ section {
     align-items: center;
   }
   .hero-button {
-    justify-content: start;
     white-space: nowrap;
   }
   .hero-left h2 {
@@ -144,10 +144,5 @@ section {
 
   .hero-right {
     display: none;
-  }
-
-  .hero-button {
-    flex-direction: column;
-    align-items: start;
   }
 }
