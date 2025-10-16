@@ -1,3 +1,4 @@
+import Footer from "./components/footer/Footer.tsx";
 import Hero from "./components/hero/Hero.tsx";
 import Navbar from "./components/Navbar/Navbar.tsx";
 import ShopCategories from "./components/shopCategories/ShopCategories.tsx";
@@ -10,6 +11,7 @@ function App() {
       <Hero />
       <TopRatedProducts />
       <ShopCategories />
+      <Footer />
     </>
   );
 }
