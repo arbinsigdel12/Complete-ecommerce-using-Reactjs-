@@ -74,7 +74,7 @@
   position: sticky;
   top: 0;
   height: var(--navbar-height);
-  z-index: 1000;
+  z-index: 950;
 }
 
 /* Left Section: Logo + Hamburger */

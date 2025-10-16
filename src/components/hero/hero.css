@@ -138,6 +138,10 @@ section {
 }
 
 @media (max-width: 480px) {
+  section {
+    padding: 40px 10px 40px 10px;
+  }
+
   .hero-right {
     display: none;
   }
