@@ -5,7 +5,7 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { LiaCartPlusSolid } from "react-icons/lia";
 import { CiPhone } from "react-icons/ci";
-import NavbarSearch from "../NavbarSearch/NavbarSearch";
+import NavbarSearch from "../navbarSearch/NavbarSearch";
 
 const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
