@@ -54,14 +54,6 @@ const MensClothing: React.FC = () => {
     setFilteredProducts(sorted);
   };
 
-  if (loading) {
-    return (
-      <div className="loading-container">
-        <div className="loading-spinner">Loading...</div>
-      </div>
-    );
-  }
-
   return (
     <div className="all-categories-container">
       <div className="all-categories-header">
@@ -78,12 +70,17 @@ const MensClothing: React.FC = () => {
           </select>
         </div>
       </div>
-
-      <div className="products-grid">
-        {filteredProducts.map((product) => (
-          <Product key={product.id} product={product} />
-        ))}
-      </div>
+      {loading ? (
+        <div className="loading-container">
+          <div className="loading-spinner">Loading...</div>
+        </div>
+      ) : (
+        <div className="products-grid">
+          {filteredProducts.map((product) => (
+            <Product key={product.id} product={product} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
