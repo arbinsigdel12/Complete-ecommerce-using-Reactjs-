@@ -1,8 +1,14 @@
 import "./hero.css";
 import { BsArrowRightCircle } from "react-icons/bs";
 import LandingSvg from "../../../public/assets/Images/hero/landingSVG.svg";
+import { useNavigate } from "react-router-dom";
 
 function Hero() {
+  const navigate = useNavigate();
+
+  const navigateToAllCategories = () => {
+    navigate("/all-categories");
+  };
   return (
     <>
       <section>
@@ -17,7 +23,10 @@ function Hero() {
             </div>
             <div className="hero-button">
               <button className="learn-more">Learn More</button>
-              <button className="product-button">
+              <button
+                className="product-button"
+                onClick={navigateToAllCategories}
+              >
                 Products <BsArrowRightCircle />
               </button>
             </div>
