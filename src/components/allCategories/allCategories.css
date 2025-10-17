@@ -1,6 +1,5 @@
 .all-categories-container {
   width: 100%;
-  max-width: 100%;
   margin: 0 auto;
   padding: 40px 20px;
 }
@@ -24,9 +23,20 @@
 
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(clamp(200px, 30%, 280px), 1fr)
+  );
+  gap: clamp(20px, 3vw, 30px);
+  justify-content: center;
+  align-items: start;
   width: 100%;
+  box-sizing: border-box;
+}
+
+.products-grid > * {
+  width: 100%;
+  transition: all 0.3s ease;
 }
 
 .loading-container {
@@ -50,9 +60,11 @@
   .all-categories-header h1 {
     font-size: 2rem;
   }
+}
 
+@media (max-width: 600px) {
   .products-grid {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
   }
 }
@@ -71,7 +83,7 @@
   }
 
   .products-grid {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 15px;
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
 }
