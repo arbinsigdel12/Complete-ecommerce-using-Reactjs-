@@ -4,7 +4,7 @@ import Navbar from "./components/Navbar/Navbar.tsx";
 import Hero from "./components/hero/Hero.tsx";
 import ShopCategories from "./components/shopCategories/ShopCategories.tsx";
 import TopRatedProducts from "./components/topProduct/TopRatedProducts.tsx";
-import AllCategories from "./components/allCategories/allCategories.tsx";
+import AllCategories from "./components/allCategories/AllCategories.tsx";
 
 function App() {
   return (
