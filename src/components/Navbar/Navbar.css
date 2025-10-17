@@ -257,8 +257,8 @@
   position: fixed;
   top: 0;
   left: -100%;
-  width: 280px;
-  height: 100%;
+  width: 90vw;
+  height: 100vh;
   background: var(--bg-color);
   z-index: 1000;
   transition: left 0.3s ease;

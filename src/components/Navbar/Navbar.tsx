@@ -27,7 +27,23 @@ const Navbar: React.FC = () => {
   };
 
   const navigateToAllCategories = () => {
-    navigate("/all-categories");
+    navigate("/products");
+    closeMobileMenu();
+  };
+  const navigateToElectronics = () => {
+    navigate("/category/electronics");
+    closeMobileMenu();
+  };
+  const navigateToJewelery = () => {
+    navigate("/category/jewelery");
+    closeMobileMenu();
+  };
+  const navigateToMensClothing = () => {
+    navigate("/category/mensclothing");
+    closeMobileMenu();
+  };
+  const navigateToWomensClothing = () => {
+    navigate("/category/womensclothing");
     closeMobileMenu();
   };
 
@@ -149,10 +165,10 @@ const Navbar: React.FC = () => {
 
           <ul>
             <li onClick={navigateToAllCategories}>All</li>
-            <li onClick={closeMobileMenu}>Electronics</li>
-            <li onClick={closeMobileMenu}>Jewellery</li>
-            <li onClick={closeMobileMenu}>Men's Clothing</li>
-            <li onClick={closeMobileMenu}>Women's Clothing</li>
+            <li onClick={navigateToElectronics}>Electronics</li>
+            <li onClick={navigateToJewelery}>Jewelery</li>
+            <li onClick={navigateToMensClothing}>Men's Clothing</li>
+            <li onClick={navigateToWomensClothing}>Women's Clothing</li>
           </ul>
         </div>
       </div>
@@ -160,10 +176,10 @@ const Navbar: React.FC = () => {
       <div className="category-bar">
         <ul>
           <li onClick={navigateToAllCategories}>All</li>
-          <li>Electronics</li>
-          <li>Jewellery</li>
-          <li>Men's Clothing</li>
-          <li>Women's Clothing</li>
+          <li onClick={navigateToElectronics}>Electronics</li>
+          <li onClick={navigateToJewelery}>Jewelery</li>
+          <li onClick={navigateToMensClothing}>Men's Clothing</li>
+          <li onClick={navigateToWomensClothing}>Women's Clothing</li>
         </ul>
       </div>
     </>

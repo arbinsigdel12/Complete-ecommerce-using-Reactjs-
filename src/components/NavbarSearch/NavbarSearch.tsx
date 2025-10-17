@@ -68,7 +68,7 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({ isMobile = false }) => {
           <select ref={selectRef} id="product-catagory">
             <option>All</option>
             <option>Electronics</option>
-            <option>Jewellery</option>
+            <option>Jewelery</option>
             <option>Men's Clothing</option>
             <option>Women's Clothing</option>
           </select>
