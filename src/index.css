@@ -33,3 +33,7 @@ body {
   background-color: var(--bg-color);
   line-height: 1.5;
 }
+
+.App {
+  min-height: 100vh;
+}

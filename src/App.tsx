@@ -1,16 +1,30 @@
+import { Routes, Route } from "react-router-dom";
 import Footer from "./components/footer/Footer.tsx";
-import Hero from "./components/hero/Hero.tsx";
 import Navbar from "./components/Navbar/Navbar.tsx";
+import Hero from "./components/hero/Hero.tsx";
 import ShopCategories from "./components/shopCategories/ShopCategories.tsx";
 import TopRatedProducts from "./components/topProduct/TopRatedProducts.tsx";
+import AllCategories from "./components/allCategories/allCategories.tsx";
 
 function App() {
   return (
     <>
       <Navbar />
-      <Hero />
-      <TopRatedProducts />
-      <ShopCategories />
+      <div className="App">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <Hero />
+                <TopRatedProducts />
+                <ShopCategories />
+              </>
+            }
+          />
+          <Route path="/all-categories" element={<AllCategories />} />
+        </Routes>
+      </div>
       <Footer />
     </>
   );

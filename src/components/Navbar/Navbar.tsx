@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./navbar.css";
 import van from "../../../public/assets/Images/navbarlogo/van.webp";
 import { FaBars, FaTimes } from "react-icons/fa";
@@ -9,6 +10,7 @@ import NavbarSearch from "../NavbarSearch/NavbarSearch";
 
 const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -16,6 +18,17 @@ const Navbar: React.FC = () => {
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
+  };
+
+  // Navigation functions
+  const navigateToHome = () => {
+    navigate("/");
+    closeMobileMenu();
+  };
+
+  const navigateToAllCategories = () => {
+    navigate("/all-categories");
+    closeMobileMenu();
   };
 
   //Close menu sidebar when clicked to overlay
@@ -92,7 +105,7 @@ const Navbar: React.FC = () => {
             <FaBars />
           </button>
 
-          <div className="logo-section">
+          <div className="logo-section" onClick={navigateToHome}>
             <div className="logo-placeholder">
               <img src={van} alt="ClickCart Logo" />
             </div>
@@ -135,7 +148,7 @@ const Navbar: React.FC = () => {
           <h4 className="mobile-menu-subheading">Categories</h4>
 
           <ul>
-            <li onClick={closeMobileMenu}>All</li>
+            <li onClick={navigateToAllCategories}>All</li>
             <li onClick={closeMobileMenu}>Electronics</li>
             <li onClick={closeMobileMenu}>Jewellery</li>
             <li onClick={closeMobileMenu}>Men's Clothing</li>
@@ -146,7 +159,7 @@ const Navbar: React.FC = () => {
 
       <div className="category-bar">
         <ul>
-          <li>All</li>
+          <li onClick={navigateToAllCategories}>All</li>
           <li>Electronics</li>
           <li>Jewellery</li>
           <li>Men's Clothing</li>
