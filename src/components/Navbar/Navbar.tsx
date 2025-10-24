@@ -136,7 +136,8 @@ const Navbar: React.FC = () => {
             <MdOutlineAccountCircle />
             <span>Account</span>
           </div>
-          <div className="cart">
+
+          <div className="cart" onClick={() => navigate("/cart")}>
             <LiaCartPlusSolid />
             <span>Cart</span>
             <div className="counter-circle">

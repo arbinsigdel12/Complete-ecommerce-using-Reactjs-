@@ -1,5 +1,6 @@
 import React from "react";
 import { FaStar, FaRegStar } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import "./Product.css";
 
 interface ProductProps {
@@ -34,7 +35,11 @@ const Product: React.FC<{ product: ProductProps }> = ({ product }) => {
           {renderStars(product.rating.rate)}
           <span>({product.rating.count})</span>
         </div>
-        <button className="details-btn">View Details</button>
+
+        {/*Link to detail page */}
+        <Link to={`/product/${product.id}`}>
+          <button className="details-btn">View Details</button>
+        </Link>
       </div>
     </div>
   );
