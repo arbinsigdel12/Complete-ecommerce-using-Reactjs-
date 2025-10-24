@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { FaStar, FaRegStar, FaRegClipboard } from "react-icons/fa";
-import { CiDeliveryTruck } from "react-icons/ci";
+import { FaStar, FaRegStar } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../hooks/redux";
+import { addToCartWithQuantity } from "../../store/slices/cartSlice";
 
 interface Product {
   id: number;
@@ -22,6 +23,7 @@ interface ProductInfoSectionProps {
 
 const ProductInfoSection: React.FC<ProductInfoSectionProps> = ({ product }) => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [quantity, setQuantity] = useState(1);
 
   const renderStars = (rating: number) => {
@@ -35,6 +37,35 @@ const ProductInfoSection: React.FC<ProductInfoSectionProps> = ({ product }) => {
 
   const increaseQty = () => setQuantity((q) => q + 1);
   const decreaseQty = () => setQuantity((q) => (q > 1 ? q - 1 : 1));
+
+  const handleAddToCart = () => {
+    dispatch(
+      addToCartWithQuantity({
+        product: {
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          image: product.image,
+        },
+        quantity,
+      })
+    );
+  };
+
+  const handleBuyNow = () => {
+    dispatch(
+      addToCartWithQuantity({
+        product: {
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          image: product.image,
+        },
+        quantity,
+      })
+    );
+    navigate("/cart");
+  };
 
   return (
     <div className="product-info-section">
@@ -61,25 +92,12 @@ const ProductInfoSection: React.FC<ProductInfoSectionProps> = ({ product }) => {
       </p>
 
       <div className="buttons">
-        <button className="buy-now">Buy Now</button>
-        <button className="add-cart" onClick={() => navigate("/cart")}>
+        <button className="buy-now" onClick={handleBuyNow}>
+          Buy Now
+        </button>
+        <button className="add-cart" onClick={handleAddToCart}>
           Add to Cart
         </button>
-      </div>
-
-      <div className="delivery-info">
-        <div className="delivery-box">
-          <h4>
-            <CiDeliveryTruck /> Free Delivery
-          </h4>
-          <p>Enter your postal code for delivery availability</p>
-        </div>
-        <div className="delivery-box">
-          <h4>
-            <FaRegClipboard /> Return Delivery
-          </h4>
-          <p>Free 30 days delivery returns.</p>
-        </div>
       </div>
     </div>
   );

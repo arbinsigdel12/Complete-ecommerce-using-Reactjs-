@@ -7,10 +7,15 @@ import { MdOutlineAccountCircle } from "react-icons/md";
 import { LiaCartPlusSolid } from "react-icons/lia";
 import { CiPhone } from "react-icons/ci";
 import NavbarSearch from "../NavbarSearch/NavbarSearch";
+import { useAppSelector } from "../../hooks/redux";
 
 const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const cartItems = useAppSelector((state) => state.cart.items);
+  const getTotalItems = () => {
+    return cartItems.reduce((total, item) => total + item.quantity, 0);
+  };
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -141,7 +146,7 @@ const Navbar: React.FC = () => {
             <LiaCartPlusSolid />
             <span>Cart</span>
             <div className="counter-circle">
-              <p className="cart-counter">1</p>
+              <p className="cart-counter">{getTotalItems()}</p>
             </div>
           </div>
         </div>

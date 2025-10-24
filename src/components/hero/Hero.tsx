@@ -7,7 +7,7 @@ function Hero() {
   const navigate = useNavigate();
 
   const navigateToAllCategories = () => {
-    navigate("/all-categories");
+    navigate("/products");
   };
   return (
     <>

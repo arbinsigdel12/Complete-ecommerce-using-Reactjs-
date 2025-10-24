@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import { Provider } from "react-redux";
 import Footer from "./components/footer/Footer";
 import Navbar from "./components/Navbar/Navbar";
 import Hero from "./components/hero/Hero";
@@ -11,10 +12,11 @@ import MensClothing from "./components/categories/mensclothing/Mensclothing";
 import WomensClothing from "./components/categories/womensclothing/Womensclothing";
 import ProductDetail from "./components/productdetail/ProductDetail";
 import CartPage from "./components/cart/CartPage";
+import { store } from "./store";
 
 function App() {
   return (
-    <>
+    <Provider store={store}>
       <Navbar />
       <div className="App">
         <Routes>
@@ -38,7 +40,7 @@ function App() {
         </Routes>
       </div>
       <Footer />
-    </>
+    </Provider>
   );
 }
 

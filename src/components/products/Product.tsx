@@ -2,6 +2,8 @@ import React from "react";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import "./Product.css";
+import { useAppDispatch } from "../../hooks/redux";
+import { addToCart } from "../../store/slices/cartSlice";
 
 interface ProductProps {
   id: number;
@@ -12,6 +14,8 @@ interface ProductProps {
 }
 
 const Product: React.FC<{ product: ProductProps }> = ({ product }) => {
+  const dispatch = useAppDispatch();
+
   const renderStars = (rating: number) => {
     const stars = [];
     const rounded = Math.round(rating);
@@ -21,27 +25,40 @@ const Product: React.FC<{ product: ProductProps }> = ({ product }) => {
     return stars;
   };
 
-  return (
-    <div className="product-card" key={product.id}>
-      <img src={product.image} alt={product.title} />
-      <div className="product-info">
-        <h3>
-          {product.title.length > 20
-            ? product.title.slice(0, 15) + "..."
-            : product.title}
-        </h3>
-        <p className="price">${product.price.toFixed(2)}</p>
-        <div className="rating">
-          {renderStars(product.rating.rate)}
-          <span>({product.rating.count})</span>
-        </div>
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch(
+      addToCart({
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        image: product.image,
+      })
+    );
+  };
 
-        {/*Link to detail page */}
-        <Link to={`/product/${product.id}`}>
-          <button className="details-btn">View Details</button>
-        </Link>
+  return (
+    <Link to={`/product/${product.id}`} className="product-card">
+      <div className="product-content">
+        <img src={product.image} alt={product.title} />
+        <div className="product-info">
+          <h3>
+            {product.title.length > 20
+              ? product.title.slice(0, 15) + "..."
+              : product.title}
+          </h3>
+          <p className="price">${product.price.toFixed(2)}</p>
+          <div className="rating">
+            {renderStars(product.rating.rate)}
+            <span>({product.rating.count})</span>
+          </div>
+        </div>
       </div>
-    </div>
+      <button className="details-btn" onClick={handleAddToCart}>
+        Add to Cart
+      </button>
+    </Link>
   );
 };
 
