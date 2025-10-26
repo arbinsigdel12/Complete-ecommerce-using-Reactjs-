@@ -106,9 +106,6 @@ const CartPage: React.FC = () => {
                     Remove
                   </button>
                 </div>
-                <p className="item-total">
-                  Total: ${(item.price * item.quantity).toFixed(2)}
-                </p>
               </div>
             </div>
           ))

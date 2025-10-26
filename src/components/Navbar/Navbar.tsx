@@ -96,7 +96,7 @@ const Navbar: React.FC = () => {
         </div>
         <div className="top-center">
           <span>Get 50% off on selected items |</span>
-          <a href="#">Shop Now</a>
+          <button onClick={navigateToAllCategories}>Shop Now</button>
         </div>
         <div className="top-right">
           <select name="eng">
@@ -112,7 +112,7 @@ const Navbar: React.FC = () => {
         </div>
         <div className="top-center-mobile">
           <span>Get 50% off on selected items | </span>
-          <a href="#">Shop Now</a>
+          <button onClick={navigateToAllCategories}>Shop Now</button>
         </div>
       </div>
 

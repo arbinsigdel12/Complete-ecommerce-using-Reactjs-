@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./productCatagory.css";
 
 interface ProductCategoryProps {
@@ -26,10 +27,48 @@ const categories: ProductCategoryProps[] = [
 ];
 
 const ProductCategory: React.FC = () => {
+  const navigate = useNavigate();
+
+  const navigateToElectronics = () => {
+    navigate("/category/electronics");
+  };
+  const navigateToJewelery = () => {
+    navigate("/category/jewelery");
+  };
+  const navigateToMensClothing = () => {
+    navigate("/category/mensclothing");
+  };
+  const navigateToWomensClothing = () => {
+    navigate("/category/womensclothing");
+  };
+
+  const handleNavigation = (title: string) => {
+    switch (title.toLowerCase()) {
+      case "electronics":
+        navigateToElectronics();
+        break;
+      case "jewellery":
+        navigateToJewelery();
+        break;
+      case "men's clothing":
+        navigateToMensClothing();
+        break;
+      case "women's clothing":
+        navigateToWomensClothing();
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <div className="category-container">
       {categories.map((product, index) => (
-        <div key={index} className="category-card">
+        <div
+          key={index}
+          className="category-card"
+          onClick={() => handleNavigation(product.title)}
+        >
           <div className="category-inner">
             <img
               src={product.image}

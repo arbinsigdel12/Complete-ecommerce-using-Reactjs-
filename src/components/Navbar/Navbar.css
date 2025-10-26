@@ -11,15 +11,19 @@
   gap: 15px;
 }
 
-.top-bar a {
+.top-bar button {
   color: var(--light-text);
   margin-left: 8px;
   text-decoration: underline;
   font-weight: 500;
   transition: color 0.3s ease;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
 }
 
-.top-bar a:hover {
+.top-bar button:hover {
   color: #fff;
 }
 
@@ -418,7 +422,7 @@
     font-size: 12px;
   }
 
-  .top-center-mobile a {
+  .top-center-mobile button {
     margin-left: 10px;
   }
 
