@@ -76,7 +76,7 @@
   border-radius: 10px;
   padding: 15px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  animation: pulse 1.5s ease-in-out infinite;
+  animation: pulse 5s ease-in-out infinite;
 }
 
 .skeleton-image {
@@ -86,7 +86,7 @@
   background-size: 200% 100%;
   border-radius: 8px;
   margin-bottom: 15px;
-  animation: shimmer 2s infinite;
+  animation: shimmer 5s infinite;
 }
 
 .skeleton-content {
@@ -99,7 +99,7 @@
   background-size: 200% 100%;
   border-radius: 4px;
   margin-bottom: 10px;
-  animation: shimmer 2s infinite;
+  animation: shimmer 5s infinite;
 }
 
 .skeleton-title.short {
@@ -112,7 +112,7 @@
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 200% 100%;
   border-radius: 4px;
-  animation: shimmer 2s infinite;
+  animation: shimmer 5s infinite;
 }
 
 .skeleton-rating {
@@ -122,7 +122,7 @@
   background-size: 200% 100%;
   border-radius: 4px;
   margin-top: 8px;
-  animation: shimmer 2s infinite;
+  animation: shimmer 5s infinite;
 }
 
 @keyframes pulse {
