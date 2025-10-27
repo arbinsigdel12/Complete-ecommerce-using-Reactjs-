@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Product from "../../products/Product";
-import "./mensclothing.css";
+import "../catagories.css";
 
 interface ProductType {
   id: number;
@@ -54,6 +54,23 @@ const MensClothing: React.FC = () => {
     setFilteredProducts(sorted);
   };
 
+  // Skeleton loading component
+  const SkeletonLoader = () => (
+    <div className="skeleton-grid">
+      {Array.from({ length: 8 }).map((_, index) => (
+        <div key={index} className="skeleton-card">
+          <div className="skeleton-image"></div>
+          <div className="skeleton-content">
+            <div className="skeleton-title"></div>
+            <div className="skeleton-title short"></div>
+            <div className="skeleton-price"></div>
+            <div className="skeleton-rating"></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
   return (
     <div className="all-categories-container">
       <div className="all-categories-header">
@@ -71,9 +88,7 @@ const MensClothing: React.FC = () => {
         </div>
       </div>
       {loading ? (
-        <div className="loading-container">
-          <div className="loading-spinner">Loading...</div>
-        </div>
+        <SkeletonLoader />
       ) : (
         <div className="products-grid">
           {filteredProducts.map((product) => (

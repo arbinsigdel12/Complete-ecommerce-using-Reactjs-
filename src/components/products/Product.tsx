@@ -43,11 +43,7 @@ const Product: React.FC<{ product: ProductProps }> = ({ product }) => {
       <div className="product-content">
         <img src={product.image} alt={product.title} />
         <div className="product-info">
-          <h3>
-            {product.title.length > 20
-              ? product.title.slice(0, 15) + "..."
-              : product.title}
-          </h3>
+          <h3>{product.title}</h3>
           <p className="price">${product.price.toFixed(2)}</p>
           <div className="rating">
             {renderStars(product.rating.rate)}

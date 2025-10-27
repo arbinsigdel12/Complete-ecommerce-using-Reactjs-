@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { addToCartWithQuantity } from "../../store/slices/cartSlice";
 
 interface Product {
@@ -25,6 +25,14 @@ const ProductInfoSection: React.FC<ProductInfoSectionProps> = ({ product }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [quantity, setQuantity] = useState(1);
+  const [notice, setNotice] = useState("");
+
+  const cartItems = useAppSelector((state) => state.cart.items);
+
+  const initialStock = 10 + (product.id % 10);
+  const cartItem = cartItems.find((item) => item.id === product.id);
+  const currentCartQuantity = cartItem ? cartItem.quantity : 0;
+  const availableStock = initialStock - currentCartQuantity;
 
   const renderStars = (rating: number) => {
     const stars = [];
@@ -35,10 +43,18 @@ const ProductInfoSection: React.FC<ProductInfoSectionProps> = ({ product }) => {
     return stars;
   };
 
-  const increaseQty = () => setQuantity((q) => q + 1);
+  const increaseQty = () => {
+    if (quantity < availableStock) setQuantity((q) => q + 1);
+  };
+
   const decreaseQty = () => setQuantity((q) => (q > 1 ? q - 1 : 1));
 
   const handleAddToCart = () => {
+    if (quantity > availableStock) {
+      setNotice(`Only ${availableStock} items available.`);
+      return;
+    }
+
     dispatch(
       addToCartWithQuantity({
         product: {
@@ -53,6 +69,11 @@ const ProductInfoSection: React.FC<ProductInfoSectionProps> = ({ product }) => {
   };
 
   const handleBuyNow = () => {
+    if (quantity > availableStock) {
+      setNotice(`Only ${availableStock} items available.`);
+      return;
+    }
+
     dispatch(
       addToCartWithQuantity({
         product: {
@@ -64,6 +85,7 @@ const ProductInfoSection: React.FC<ProductInfoSectionProps> = ({ product }) => {
         quantity,
       })
     );
+
     navigate("/cart");
   };
 
@@ -81,24 +103,44 @@ const ProductInfoSection: React.FC<ProductInfoSectionProps> = ({ product }) => {
       <p className="monthly">or ${(product.price / 6).toFixed(2)}/month</p>
 
       <div className="quantity-section">
-        <button onClick={decreaseQty}>−</button>
+        <button onClick={decreaseQty} disabled={quantity <= 1}>
+          −
+        </button>
         <span>{quantity}</span>
-        <button onClick={increaseQty}>+</button>
+        <button onClick={increaseQty} disabled={quantity >= availableStock}>
+          +
+        </button>
       </div>
 
       <p className="stock-info">
-        Only <span className="highlight">{10 + (product.id % 10)}</span> items
-        left!
+        Only <span className="highlight">{availableStock}</span> items left!
+        {currentCartQuantity > 0 && (
+          <span className="cart-notice"> ({currentCartQuantity} in cart)</span>
+        )}
       </p>
 
+      {notice && <p className="cart-notice">{notice}</p>}
+
       <div className="buttons">
-        <button className="buy-now" onClick={handleBuyNow}>
-          Buy Now
+        <button
+          className="buy-now"
+          onClick={handleBuyNow}
+          disabled={availableStock === 0}
+        >
+          {availableStock === 0 ? "Out of Stock" : "Buy Now"}
         </button>
-        <button className="add-cart" onClick={handleAddToCart}>
-          Add to Cart
+        <button
+          className="add-cart"
+          onClick={handleAddToCart}
+          disabled={availableStock === 0}
+        >
+          {availableStock === 0 ? "Out of Stock" : "Add to Cart"}
         </button>
       </div>
+
+      {availableStock < 5 && availableStock > 0 && (
+        <p className="low-stock-warning">Hurry! Only a few left in stock!</p>
+      )}
     </div>
   );
 };

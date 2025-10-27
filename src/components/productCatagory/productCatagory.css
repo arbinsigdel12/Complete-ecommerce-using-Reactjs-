@@ -70,7 +70,7 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 860px) {
   .category-container {
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
@@ -81,7 +81,7 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 480px) {
   .category-container {
     grid-template-columns: 1fr;
     gap: 15px;

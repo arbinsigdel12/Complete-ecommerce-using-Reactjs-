@@ -114,15 +114,28 @@ const TopRatedProducts: React.FC = () => {
     carouselRef.current?.scrollBy({ left: scrollAmount, behavior: "smooth" });
   };
 
+  // Skeleton loader for carousel
+  const CarouselSkeleton = () => (
+    <div className="carousel-skeleton">
+      {Array.from({ length: 5 }).map((_, index) => (
+        <div key={index} className="carousel-skeleton-card">
+          <div className="carousel-skeleton-image"></div>
+          <div className="carousel-skeleton-content">
+            <div className="carousel-skeleton-title"></div>
+            <div className="carousel-skeleton-title short"></div>
+            <div className="carousel-skeleton-price"></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
   return (
     <div className="top-rated-section">
       <h2>Top Rated Products</h2>
 
       {loading ? (
-        <div className="loader-container">
-          <div className="spinner"></div>
-          <p>Loading top-rated products...</p>
-        </div>
+        <CarouselSkeleton />
       ) : products.length === 0 ? (
         <p className="no-products">No top-rated products found.</p>
       ) : (
