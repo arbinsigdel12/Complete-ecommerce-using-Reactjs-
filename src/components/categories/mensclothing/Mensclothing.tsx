@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Product from "../../products/Product";
 import "../catagories.css";
+import { fetchProductsByCategory } from "../../../services/product.services";
 
 interface ProductType {
   id: number;
@@ -10,34 +11,48 @@ interface ProductType {
   rating: { rate: number; count: number };
 }
 
+const SkeletonLoader = () => (
+  <div className="skeleton-grid">
+    {Array.from({ length: 8 }).map((_, index) => (
+      <div key={index} className="skeleton-card">
+        <div className="skeleton-image"></div>
+        <div className="skeleton-content">
+          <div className="skeleton-title"></div>
+          <div className="skeleton-title short"></div>
+          <div className="skeleton-price"></div>
+          <div className="skeleton-rating"></div>
+        </div>
+      </div>
+    ))}
+  </div>
+);
+
 const MensClothing: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<ProductType[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<ProductType[]>([]);
-  const [filter, setFilter] = useState("best-match");
-
-  const fetchData = async () => {
-    try {
-      const res = await fetch(
-        "https://fakestoreapi.com/products/category/men's clothing"
-      );
-      const data: ProductType[] = await res.json();
-      setProducts(data);
-      setFilteredProducts(data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setTimeout(() => setLoading(false), 500);
-    }
-  };
+  const [sortedProducts, setSortedProducts] = useState<ProductType[]>([]);
+  const [sortOption, setSortOption] = useState("best-match");
 
   useEffect(() => {
-    fetchData();
+    const loadData = async () => {
+      try {
+        const data: ProductType[] = await fetchProductsByCategory(
+          "men's clothing"
+        );
+        setProducts(data);
+        setSortedProducts(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setTimeout(() => setLoading(false), 500);
+      }
+    };
+    loadData();
   }, []);
 
-  const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selected = e.target.value;
-    setFilter(selected);
+    setSortOption(selected);
 
     let sorted = [...products];
 
@@ -48,28 +63,11 @@ const MensClothing: React.FC = () => {
     } else if (selected === "top-rated") {
       sorted.sort((a, b) => b.rating.rate - a.rating.rate);
     } else {
-      sorted = [...products]; // Best Match → normal fetch order
+      sorted = [...products];
     }
 
-    setFilteredProducts(sorted);
+    setSortedProducts(sorted);
   };
-
-  // Skeleton loading component
-  const SkeletonLoader = () => (
-    <div className="skeleton-grid">
-      {Array.from({ length: 8 }).map((_, index) => (
-        <div key={index} className="skeleton-card">
-          <div className="skeleton-image"></div>
-          <div className="skeleton-content">
-            <div className="skeleton-title"></div>
-            <div className="skeleton-title short"></div>
-            <div className="skeleton-price"></div>
-            <div className="skeleton-rating"></div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
 
   return (
     <div className="all-categories-container">
@@ -79,7 +77,7 @@ const MensClothing: React.FC = () => {
           <p>Browse our complete collection of products</p>
         </div>
         <div className="filter-button">
-          <select value={filter} onChange={handleFilterChange}>
+          <select value={sortOption} onChange={handleSortChange}>
             <option value="best-match">Best Match</option>
             <option value="price-low-to-high">Price low to high</option>
             <option value="price-high-to-low">Price high to low</option>
@@ -91,7 +89,7 @@ const MensClothing: React.FC = () => {
         <SkeletonLoader />
       ) : (
         <div className="products-grid">
-          {filteredProducts.map((product) => (
+          {sortedProducts.map((product) => (
             <Product key={product.id} product={product} />
           ))}
         </div>

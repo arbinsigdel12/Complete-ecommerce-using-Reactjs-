@@ -73,6 +73,7 @@ section {
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.6s ease;
+  text-decoration: none;
 }
 .product-button svg {
   transition: all 0.6s ease;

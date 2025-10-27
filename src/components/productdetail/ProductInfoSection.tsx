@@ -70,24 +70,10 @@ const ProductInfoSection: React.FC<ProductInfoSectionProps> = ({ product }) => {
   };
 
   const handleBuyNow = () => {
-    if (quantity > availableStock) {
-      setNotice(`Only ${availableStock} items available.`);
-      return;
+    handleAddToCart();
+    if (quantity <= availableStock) {
+      navigate("/cart");
     }
-
-    dispatch(
-      addToCartWithQuantity({
-        product: {
-          id: product.id,
-          title: product.title,
-          price: product.price,
-          image: product.image,
-        },
-        quantity,
-      })
-    );
-    setQuantity(1);
-    navigate("/cart");
   };
 
   return (

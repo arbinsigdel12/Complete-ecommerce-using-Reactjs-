@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./cartpage.css";
 import { useAppSelector, useAppDispatch } from "../../hooks/redux";
+import { Link } from "react-router-dom";
+import CartItem from "./CartItem";
 import {
   updateQuantity,
   removeFromCart,
@@ -11,6 +13,7 @@ const CartPage: React.FC = () => {
   const cartItems = useAppSelector((state) => state.cart.items);
   const dispatch = useAppDispatch();
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [customerName, setCustomerName] = useState("");
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -39,8 +42,16 @@ const CartPage: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setCustomerName(formData.fullName);
     setOrderPlaced(true);
     dispatch(clearCart());
+    setFormData({
+      fullName: "",
+      email: "",
+      phone: "",
+      postalCode: "",
+      address: "",
+    });
   };
 
   const subtotal = cartItems.reduce(
@@ -57,11 +68,11 @@ const CartPage: React.FC = () => {
       <div className="cart-wrapper">
         <div className="order-success">
           <h2>Order Completed Successfully!</h2>
-          <p>Thank you for your purchase, {formData.fullName}!</p>
+          <p>Thank you for your purchase, {customerName}!</p>
           <p>Your order has been placed and will be shipped soon.</p>
-          <button onClick={() => setOrderPlaced(false)}>
-            Continue Shopping
-          </button>
+          <Link to="/products">
+            <button>Continue Shopping</button>
+          </Link>
         </div>
       </div>
     );
@@ -76,38 +87,12 @@ const CartPage: React.FC = () => {
           <p>Your cart is empty</p>
         ) : (
           cartItems.map((item) => (
-            <div key={item.id} className="cart-item">
-              <img src={item.image} alt={item.title} />
-              <div className="cart-item-info">
-                <h4>{item.title}</h4>
-                <p className="cart-price">${item.price.toFixed(2)}</p>
-                <div className="cart-quantity-controls">
-                  <div className="quantity-buttons">
-                    <button
-                      onClick={() =>
-                        handleQuantityChange(item.id, item.quantity - 1)
-                      }
-                    >
-                      −
-                    </button>
-                    <span>Qty: {item.quantity}</span>
-                    <button
-                      onClick={() =>
-                        handleQuantityChange(item.id, item.quantity + 1)
-                      }
-                    >
-                      +
-                    </button>
-                  </div>
-                  <button
-                    className="remove-btn"
-                    onClick={() => handleRemoveItem(item.id)}
-                  >
-                    Remove
-                  </button>
-                </div>
-              </div>
-            </div>
+            <CartItem
+              key={item.id}
+              item={item}
+              onQuantityChange={handleQuantityChange}
+              onRemove={handleRemoveItem}
+            />
           ))
         )}
       </div>

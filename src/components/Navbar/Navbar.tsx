@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import "./navbar.css";
+import { Link } from "react-router-dom";
+import "./Navbar.css";
 import van from "../../../public/assets/Images/navbarlogo/van.webp";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { MdOutlineAccountCircle } from "react-icons/md";
@@ -11,7 +11,6 @@ import { useAppSelector } from "../../hooks/redux";
 
 const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const navigate = useNavigate();
   const cartItems = useAppSelector((state) => state.cart.items);
   const getTotalItems = () => {
     return cartItems.reduce((total, item) => total + item.quantity, 0);
@@ -24,49 +23,6 @@ const Navbar: React.FC = () => {
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
   };
-
-  // Navigation functions
-  const navigateToHome = () => {
-    navigate("/");
-    closeMobileMenu();
-  };
-
-  const navigateToAllCategories = () => {
-    navigate("/products");
-    closeMobileMenu();
-  };
-  const navigateToElectronics = () => {
-    navigate("/category/electronics");
-    closeMobileMenu();
-  };
-  const navigateToJewelery = () => {
-    navigate("/category/jewelery");
-    closeMobileMenu();
-  };
-  const navigateToMensClothing = () => {
-    navigate("/category/mensclothing");
-    closeMobileMenu();
-  };
-  const navigateToWomensClothing = () => {
-    navigate("/category/womensclothing");
-    closeMobileMenu();
-  };
-
-  //Close menu sidebar when clicked to overlay
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (
-        isMobileMenuOpen &&
-        target.classList.contains("mobile-menu-overlay")
-      ) {
-        setIsMobileMenuOpen(false);
-      }
-    };
-
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, [isMobileMenuOpen]);
 
   // Make overlay not scrollable when sidebar is active
   useEffect(() => {
@@ -96,7 +52,9 @@ const Navbar: React.FC = () => {
         </div>
         <div className="top-center">
           <span>Get 50% off on selected items |</span>
-          <button onClick={navigateToAllCategories}>Shop Now</button>
+          <Link to="/products">
+            <button>Shop Now</button>
+          </Link>
         </div>
         <div className="top-right">
           <select name="eng">
@@ -110,10 +68,6 @@ const Navbar: React.FC = () => {
             <option value="bhtn">Bhutan</option>
           </select>
         </div>
-        <div className="top-center-mobile">
-          <span>Get 50% off on selected items | </span>
-          <button onClick={navigateToAllCategories}>Shop Now</button>
-        </div>
       </div>
 
       <nav className="navbar">
@@ -126,12 +80,12 @@ const Navbar: React.FC = () => {
             <FaBars />
           </button>
 
-          <div className="logo-section" onClick={navigateToHome}>
+          <Link to="/" className="logo-section">
             <div className="logo-placeholder">
               <img src={van} alt="ClickCart Logo" />
             </div>
             <p>ClickCart</p>
-          </div>
+          </Link>
         </div>
 
         <NavbarSearch />
@@ -142,13 +96,13 @@ const Navbar: React.FC = () => {
             <span>Account</span>
           </div>
 
-          <div className="cart" onClick={() => navigate("/cart")}>
+          <Link to="/cart" className="cart">
             <LiaCartPlusSolid />
             <span>Cart</span>
             <div className="counter-circle">
               <p className="cart-counter">{getTotalItems()}</p>
             </div>
-          </div>
+          </Link>
         </div>
       </nav>
 
@@ -170,22 +124,52 @@ const Navbar: React.FC = () => {
           <h4 className="mobile-menu-subheading">Categories</h4>
 
           <ul>
-            <li onClick={navigateToAllCategories}>All</li>
-            <li onClick={navigateToElectronics}>Electronics</li>
-            <li onClick={navigateToJewelery}>Jewelery</li>
-            <li onClick={navigateToMensClothing}>Men's Clothing</li>
-            <li onClick={navigateToWomensClothing}>Women's Clothing</li>
+            <li>
+              <Link to="/products" onClick={closeMobileMenu}>
+                All
+              </Link>
+            </li>
+            <li>
+              <Link to="/category/electronics" onClick={closeMobileMenu}>
+                Electronics
+              </Link>
+            </li>
+            <li>
+              <Link to="/category/jewelery" onClick={closeMobileMenu}>
+                Jewelery
+              </Link>
+            </li>
+            <li>
+              <Link to="/category/mensclothing" onClick={closeMobileMenu}>
+                Men's Clothing
+              </Link>
+            </li>
+            <li>
+              <Link to="/category/womensclothing" onClick={closeMobileMenu}>
+                Women's Clothing
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
 
       <div className="category-bar">
         <ul>
-          <li onClick={navigateToAllCategories}>All</li>
-          <li onClick={navigateToElectronics}>Electronics</li>
-          <li onClick={navigateToJewelery}>Jewelery</li>
-          <li onClick={navigateToMensClothing}>Men's Clothing</li>
-          <li onClick={navigateToWomensClothing}>Women's Clothing</li>
+          <li>
+            <Link to="/products">All</Link>
+          </li>
+          <li>
+            <Link to="/category/electronics">Electronics</Link>
+          </li>
+          <li>
+            <Link to="/category/jewelery">Jewelery</Link>
+          </li>
+          <li>
+            <Link to="/category/mensclothing">Men's Clothing</Link>
+          </li>
+          <li>
+            <Link to="/category/womensclothing">Women's Clothing</Link>
+          </li>
         </ul>
       </div>
     </>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ProductImageSection from "./ProductImageSection";
 import ProductInfoSection from "./ProductInfoSection";
-import "./ProductDetail.css";
+import "./productdetail.css";
 
 interface Product {
   id: number;

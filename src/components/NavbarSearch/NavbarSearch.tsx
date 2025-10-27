@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
-import "./navbarSearch.css";
+import "./NavbarSearch.css";
 
 interface NavbarSearchProps {
   isMobile?: boolean;
@@ -10,18 +10,16 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({ isMobile = false }) => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const selectRef = useRef<HTMLSelectElement>(null);
+  const spanRef = useRef<HTMLSpanElement>(null);
 
-  //set search hint to active
   const handleSearchFocus = () => {
     setIsSearchFocused(true);
   };
 
-  //event to set timeout of search hint
   const handleSearchBlur = () => {
     setTimeout(() => setIsSearchFocused(false), 0);
   };
 
-  // function to handle search hint clicks
   const handleSearchHintClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (inputRef.current) {
@@ -29,43 +27,44 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({ isMobile = false }) => {
     }
   };
 
-  //close search hint on overlay clicked
   const handleOverlayClick = () => {
     setIsSearchFocused(false);
   };
 
-  // function to handle width of select
-  const adjustSelectWidth = (select: HTMLSelectElement | null) => {
-    if (!select) return;
+  const adjustSelectWidth = () => {
+    const select = selectRef.current;
+    const span = spanRef.current;
+    if (!select || !span) return;
+
     const option = select.options[select.selectedIndex];
-    const temp = document.createElement("span");
-    temp.textContent = option.text;
-    document.body.appendChild(temp);
-    select.style.width = `${temp.offsetWidth + 40}px`;
-    document.body.removeChild(temp);
+    span.textContent = option.text;
+    select.style.width = `${span.offsetWidth + 40}px`;
   };
 
-  // Ajdust select width according to catagory width
   useEffect(() => {
-    const select = selectRef.current;
-    if (!select) return;
-
-    adjustSelectWidth(select);
-    select.addEventListener("change", () => adjustSelectWidth(select));
-
-    return () => {
-      select.removeEventListener("change", () => adjustSelectWidth(select));
-    };
+    adjustSelectWidth();
   }, []);
+
+  const handleSelectChange = () => {
+    adjustSelectWidth();
+  };
 
   return (
     <>
       {isSearchFocused && (
         <div className="search-overlay" onClick={handleOverlayClick} />
       )}
+      <span
+        ref={spanRef}
+        style={{ visibility: "hidden", position: "absolute" }}
+      ></span>
       <div className={`search-wrapper ${isMobile ? "mobile-visible" : ""}`}>
         <div className="search-section">
-          <select ref={selectRef} id="product-catagory">
+          <select
+            ref={selectRef}
+            id="product-catagory"
+            onChange={handleSelectChange}
+          >
             <option>All</option>
             <option>Electronics</option>
             <option>Jewelery</option>
