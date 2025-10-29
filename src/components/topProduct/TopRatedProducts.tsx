@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import "./TopRatedProducts.css";
 import { IoIosArrowDropleft, IoIosArrowDropright } from "react-icons/io";
 import Product from "../products/Product";
+import SkeletonLoader from "../skeletonLoader/CarouselSkeletonloader";
 
 interface ProductType {
   id: number;
@@ -19,17 +20,15 @@ const TopRatedProducts: React.FC = () => {
   const carouselRef = useRef<HTMLDivElement | null>(null);
   const checkPositionRef = useRef<(() => void) | null>(null);
 
-  // fetch api
+  // Fetch products
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await fetch("https://fakestoreapi.com/products");
         const data: ProductType[] = await res.json();
-
         const filtered = data.filter(
           (item) => item.rating && item.rating.rate >= 4
         );
-
         setProducts(filtered);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -37,34 +36,25 @@ const TopRatedProducts: React.FC = () => {
         setTimeout(() => setLoading(false));
       }
     };
-
     fetchData();
   }, []);
 
-  // Check scroll position to determine if we're at start or end
+  // Check scroll position
   const checkScrollPosition = useCallback(() => {
     const carousel = carouselRef.current;
     if (!carousel) return;
-
     const { scrollLeft, scrollWidth, clientWidth } = carousel;
-
-    // Check if at start (with a small buffer for rounding errors)
     setIsAtStart(scrollLeft <= 5);
-
-    // Check if at end (with a small buffer for rounding errors)
     setIsAtEnd(scrollLeft + clientWidth >= scrollWidth - 5);
   }, []);
 
-  // Store the function in ref for the event listener
   checkPositionRef.current = checkScrollPosition;
 
-  // Check the scroll position according to responsivness and add arrow accordingly
   useEffect(() => {
     const carousel = carouselRef.current;
     if (!carousel) return;
 
     let ticking = false;
-
     const handleScroll = () => {
       if (!ticking) {
         requestAnimationFrame(() => {
@@ -76,66 +66,43 @@ const TopRatedProducts: React.FC = () => {
     };
 
     carousel.addEventListener("scroll", handleScroll, { passive: true });
-    const handleResize = () => {
-      checkScrollPosition();
-    };
-
-    window.addEventListener("resize", handleResize, { passive: true });
-
-    // Initial check
+    window.addEventListener("resize", checkScrollPosition, { passive: true });
     checkScrollPosition();
 
     return () => {
       carousel.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("resize", checkScrollPosition);
     };
   }, [checkScrollPosition, products]);
 
-  // Responsive scroll amount based on screen width
+  // Scroll handlers
   const getScrollAmount = useCallback(() => {
     if (typeof window === "undefined") return 300;
-
-    if (window.innerWidth <= 480) {
-      return 180;
-    } else if (window.innerWidth <= 860) {
-      return 250;
-    } else {
-      return 400;
-    }
+    if (window.innerWidth <= 480) return 180;
+    if (window.innerWidth <= 860) return 250;
+    return 400;
   }, []);
 
   const scrollLeftHandler = () => {
-    const scrollAmount = getScrollAmount();
-    carouselRef.current?.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    carouselRef.current?.scrollBy({
+      left: -getScrollAmount(),
+      behavior: "smooth",
+    });
   };
 
   const scrollRightHandler = () => {
-    const scrollAmount = getScrollAmount();
-    carouselRef.current?.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    carouselRef.current?.scrollBy({
+      left: getScrollAmount(),
+      behavior: "smooth",
+    });
   };
-
-  // Skeleton loader for carousel
-  const CarouselSkeleton = () => (
-    <div className="carousel-skeleton">
-      {Array.from({ length: 5 }).map((_, index) => (
-        <div key={index} className="carousel-skeleton-card">
-          <div className="carousel-skeleton-image"></div>
-          <div className="carousel-skeleton-content">
-            <div className="carousel-skeleton-title"></div>
-            <div className="carousel-skeleton-title short"></div>
-            <div className="carousel-skeleton-price"></div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
 
   return (
     <div className="top-rated-section">
       <h2>Top Rated Products</h2>
 
       {loading ? (
-        <CarouselSkeleton />
+        <SkeletonLoader />
       ) : products.length === 0 ? (
         <p className="no-products">No top-rated products found.</p>
       ) : (

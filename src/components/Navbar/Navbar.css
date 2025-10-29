@@ -27,10 +27,6 @@
   color: #fff;
 }
 
-.top-center-mobile {
-  display: none;
-}
-
 .top-left {
   display: flex;
   align-items: center;
@@ -342,10 +338,6 @@
   }
 
   .top-center {
-    display: none;
-  }
-
-  .top-center-mobile {
     display: flex;
     order: -1;
     width: 100%;
@@ -400,11 +392,11 @@
 }
 
 @media screen and (max-width: 480px) {
-  .top-center-mobile {
+  .top-center {
     font-size: 12px;
   }
 
-  .top-center-mobile button {
+  .top-center button {
     margin-left: 10px;
   }
 

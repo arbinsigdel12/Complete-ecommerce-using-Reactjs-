@@ -10,7 +10,7 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({ isMobile = false }) => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const selectRef = useRef<HTMLSelectElement>(null);
-  const spanRef = useRef<HTMLSpanElement>(null);
+  const search_selectRef = useRef<HTMLSpanElement>(null);
 
   const handleSearchFocus = () => {
     setIsSearchFocused(true);
@@ -33,7 +33,7 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({ isMobile = false }) => {
 
   const adjustSelectWidth = () => {
     const select = selectRef.current;
-    const span = spanRef.current;
+    const span = search_selectRef.current;
     if (!select || !span) return;
 
     const option = select.options[select.selectedIndex];
@@ -55,7 +55,7 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({ isMobile = false }) => {
         <div className="search-overlay" onClick={handleOverlayClick} />
       )}
       <span
-        ref={spanRef}
+        ref={search_selectRef}
         style={{ visibility: "hidden", position: "absolute" }}
       ></span>
       <div className={`search-wrapper ${isMobile ? "mobile-visible" : ""}`}>

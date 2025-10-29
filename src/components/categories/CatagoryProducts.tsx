@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Product from "../../products/Product";
-import "../catagories.css";
-import { fetchAllProducts } from "../../../services/product.services";
+import Product from "../products/Product";
+import {
+  fetchAllProducts,
+  fetchProductsByCategory,
+} from "../../services/product.services";
+import SkeletonLoader from "../skeletonLoader/CatagoriesSkeletonloader";
 
 interface ProductType {
   id: number;
@@ -11,42 +14,36 @@ interface ProductType {
   rating: { rate: number; count: number };
 }
 
-const SkeletonLoader = () => (
-  <div className="skeleton-grid">
-    {Array.from({ length: 8 }).map((_, index) => (
-      <div key={index} className="skeleton-card">
-        <div className="skeleton-image"></div>
-        <div className="skeleton-content">
-          <div className="skeleton-title"></div>
-          <div className="skeleton-title short"></div>
-          <div className="skeleton-price"></div>
-          <div className="skeleton-rating"></div>
-        </div>
-      </div>
-    ))}
-  </div>
-);
+interface CategoryProductsProps {
+  category?: string;
+}
 
-const AllCategories: React.FC = () => {
-  const [loading, setLoading] = useState(true);
+const CategoryProducts: React.FC<CategoryProductsProps> = ({ category }) => {
   const [products, setProducts] = useState<ProductType[]>([]);
   const [sortedProducts, setSortedProducts] = useState<ProductType[]>([]);
+  const [loading, setLoading] = useState(true);
   const [sortOption, setSortOption] = useState("best-match");
 
   useEffect(() => {
-    const loadData = async () => {
+    const loadProducts = async () => {
+      setLoading(true);
       try {
-        const data: ProductType[] = await fetchAllProducts();
+        let data: ProductType[] = [];
+        if (!category || category === "all") {
+          data = await fetchAllProducts();
+        } else {
+          data = await fetchProductsByCategory(category);
+        }
         setProducts(data);
         setSortedProducts(data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching products:", error);
       } finally {
-        setTimeout(() => setLoading(false), 500);
+        setLoading(false);
       }
     };
-    loadData();
-  }, []);
+    loadProducts();
+  }, [category]);
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selected = e.target.value;
@@ -67,11 +64,16 @@ const AllCategories: React.FC = () => {
     setSortedProducts(sorted);
   };
 
+  const headingText = category
+    ? category.charAt(0).toUpperCase() + category.slice(1)
+    : "All Products";
+
   return (
     <div className="all-categories-container">
+      {/* Header and sort always visible */}
       <div className="all-categories-header">
         <div className="heading">
-          <h1>All Products</h1>
+          <h1>{headingText}</h1>
           <p>Browse our complete collection of products</p>
         </div>
         <div className="filter-button">
@@ -83,17 +85,23 @@ const AllCategories: React.FC = () => {
           </select>
         </div>
       </div>
-      {loading ? (
-        <SkeletonLoader />
-      ) : (
-        <div className="products-grid">
-          {sortedProducts.map((product) => (
+
+      {/* Products grid or skeleton */}
+      <div className="products-grid">
+        {loading ? (
+          Array.from({ length: 8 }).map((_, index) => (
+            <SkeletonLoader key={index} />
+          ))
+        ) : sortedProducts.length > 0 ? (
+          sortedProducts.map((product) => (
             <Product key={product.id} product={product} />
-          ))}
-        </div>
-      )}
+          ))
+        ) : (
+          <p className="no-products">No products found in this category.</p>
+        )}
+      </div>
     </div>
   );
 };
 
-export default AllCategories;
+export default CategoryProducts;

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ProductImageSection from "./ProductImageSection";
 import ProductInfoSection from "./ProductInfoSection";
+import ProductDetailSkeleton from "../skeletonLoader/productdetail/ProductDetailsSkeletonloader";
 import "./productdetail.css";
 
 interface Product {
@@ -20,22 +21,27 @@ interface Product {
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     setLoading(true);
+    if (!id) {
+      setLoading(false);
+      return;
+    }
     fetch(`https://fakestoreapi.com/products/${id}`)
       .then((res) => res.json())
       .then((data) => {
+        // small delay kept for skeleton experience
         setTimeout(() => {
           setProduct(data);
           setLoading(false);
-        }, 1500);
+        }, 400);
       })
       .catch(() => setLoading(false));
   }, [id]);
 
-  if (loading) return <div className="loading">Loading product details...</div>;
+  if (loading) return <ProductDetailSkeleton />;
   if (!product) return <div className="error">Product not found.</div>;
 
   return (

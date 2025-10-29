@@ -4,9 +4,9 @@ import Footer from "./components/footer/Footer";
 import Navbar from "./components/Navbar/Navbar";
 import HomePage from "./pages/HomePage";
 import CategoryPage from "./pages/CategoryPage";
-import AllCategories from "./components/categories/allCategories/AllCategories";
 import ProductDetail from "./components/productdetail/ProductDetail";
 import CartPage from "./components/cart/CartPage";
+import AllCategories from "./components/categories/CatagoryProducts";
 import { store } from "./store";
 
 function App() {
@@ -16,7 +16,7 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/products" element={<AllCategories />} />
+          <Route path="/products" element={<AllCategories category="all" />} />
           <Route path="/category/:category" element={<CategoryPage />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<CartPage />} />

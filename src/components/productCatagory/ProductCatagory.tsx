@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./productCatagory.css";
 
 interface ProductCategoryProps {
@@ -27,47 +27,28 @@ const categories: ProductCategoryProps[] = [
 ];
 
 const ProductCategory: React.FC = () => {
-  const navigate = useNavigate();
-
-  const navigateToElectronics = () => {
-    navigate("/category/electronics");
-  };
-  const navigateToJewelery = () => {
-    navigate("/category/jewelery");
-  };
-  const navigateToMensClothing = () => {
-    navigate("/category/mensclothing");
-  };
-  const navigateToWomensClothing = () => {
-    navigate("/category/womensclothing");
-  };
-
-  const handleNavigation = (title: string) => {
+  const getCategoryLink = (title: string) => {
     switch (title.toLowerCase()) {
       case "electronics":
-        navigateToElectronics();
-        break;
+        return "/category/electronics";
       case "jewellery":
-        navigateToJewelery();
-        break;
+        return "/category/jewelery";
       case "men's clothing":
-        navigateToMensClothing();
-        break;
+        return "/category/mensclothing";
       case "women's clothing":
-        navigateToWomensClothing();
-        break;
+        return "/category/womensclothing";
       default:
-        break;
+        return "/";
     }
   };
 
   return (
     <div className="category-container">
       {categories.map((product, index) => (
-        <div
+        <Link
+          to={getCategoryLink(product.title)}
           key={index}
           className="category-card"
-          onClick={() => handleNavigation(product.title)}
         >
           <div className="category-inner">
             <img
@@ -77,7 +58,7 @@ const ProductCategory: React.FC = () => {
             />
             <h3 className="category-title">{product.title}</h3>
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );

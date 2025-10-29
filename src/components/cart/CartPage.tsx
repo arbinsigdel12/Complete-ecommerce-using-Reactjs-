@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./cartpage.css";
 import { useAppSelector, useAppDispatch } from "../../hooks/redux";
 import { Link } from "react-router-dom";
-import CartItem from "./CartItem";
+import CartItem from "./cartItem/CartItem";
 import {
   updateQuantity,
   removeFromCart,

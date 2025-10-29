@@ -8,33 +8,35 @@ import { LiaCartPlusSolid } from "react-icons/lia";
 import { CiPhone } from "react-icons/ci";
 import NavbarSearch from "../NavbarSearch/NavbarSearch";
 import { useAppSelector } from "../../hooks/redux";
+import { fetchCategories } from "../../services/product.services";
 
 const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [categories, setCategories] = useState<string[]>([]);
   const cartItems = useAppSelector((state) => state.cart.items);
-  const getTotalItems = () => {
-    return cartItems.reduce((total, item) => total + item.quantity, 0);
-  };
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+  const getTotalItems = () =>
+    cartItems.reduce((total, item) => total + item.quantity, 0);
 
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-  };
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
-  // Make overlay not scrollable when sidebar is active
+  // Fetch categories from API
   useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-
-    return () => {
-      document.body.style.overflow = "unset";
+    const getCategories = async () => {
+      try {
+        const data = await fetchCategories();
+        setCategories(data);
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      }
     };
+    getCategories();
+  }, []);
+
+  // Prevent scrolling when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "unset";
   }, [isMobileMenuOpen]);
 
   return (
@@ -122,33 +124,19 @@ const Navbar: React.FC = () => {
 
         <div className="mobile-menu-items">
           <h4 className="mobile-menu-subheading">Categories</h4>
-
           <ul>
             <li>
               <Link to="/products" onClick={closeMobileMenu}>
                 All
               </Link>
             </li>
-            <li>
-              <Link to="/category/electronics" onClick={closeMobileMenu}>
-                Electronics
-              </Link>
-            </li>
-            <li>
-              <Link to="/category/jewelery" onClick={closeMobileMenu}>
-                Jewelery
-              </Link>
-            </li>
-            <li>
-              <Link to="/category/mensclothing" onClick={closeMobileMenu}>
-                Men's Clothing
-              </Link>
-            </li>
-            <li>
-              <Link to="/category/womensclothing" onClick={closeMobileMenu}>
-                Women's Clothing
-              </Link>
-            </li>
+            {categories.map((cat) => (
+              <li key={cat}>
+                <Link to={`/category/${cat}`} onClick={closeMobileMenu}>
+                  {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
@@ -158,18 +146,13 @@ const Navbar: React.FC = () => {
           <li>
             <Link to="/products">All</Link>
           </li>
-          <li>
-            <Link to="/category/electronics">Electronics</Link>
-          </li>
-          <li>
-            <Link to="/category/jewelery">Jewelery</Link>
-          </li>
-          <li>
-            <Link to="/category/mensclothing">Men's Clothing</Link>
-          </li>
-          <li>
-            <Link to="/category/womensclothing">Women's Clothing</Link>
-          </li>
+          {categories.map((cat) => (
+            <li key={cat}>
+              <Link to={`/category/${cat}`}>
+                {cat.charAt(0).toUpperCase() + cat.slice(1)}
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
     </>
