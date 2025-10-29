@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import ProductImageSection from "./ProductImageSection";
-import ProductInfoSection from "./ProductInfoSection";
+import ProductImageSection from "./productimagesection/ProductImageSection";
+import ProductInfoSection from "./productinfosection/ProductInfoSection";
 import ProductDetailSkeleton from "../skeletonLoader/productdetail/ProductDetailsSkeletonloader";
 import "./productdetail.css";
 

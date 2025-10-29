@@ -18,9 +18,9 @@ const TopRatedProducts: React.FC = () => {
   const [isAtStart, setIsAtStart] = useState(true);
   const [isAtEnd, setIsAtEnd] = useState(false);
   const carouselRef = useRef<HTMLDivElement | null>(null);
-  const checkPositionRef = useRef<(() => void) | null>(null);
+  const tickingRef = useRef(false);
 
-  // Fetch products
+  // Fetch products once
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -33,49 +33,41 @@ const TopRatedProducts: React.FC = () => {
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
-        setTimeout(() => setLoading(false));
+        setTimeout(() => setLoading(false), 500);
       }
     };
     fetchData();
   }, []);
 
-  // Check scroll position
+  // Check scroll position (start/end)
   const checkScrollPosition = useCallback(() => {
     const carousel = carouselRef.current;
     if (!carousel) return;
+
     const { scrollLeft, scrollWidth, clientWidth } = carousel;
     setIsAtStart(scrollLeft <= 5);
     setIsAtEnd(scrollLeft + clientWidth >= scrollWidth - 5);
   }, []);
 
-  checkPositionRef.current = checkScrollPosition;
+  // Throttled scroll handler using ref
+  const handleScroll = useCallback(() => {
+    if (!tickingRef.current) {
+      tickingRef.current = true;
+      requestAnimationFrame(() => {
+        checkScrollPosition();
+        tickingRef.current = false;
+      });
+    }
+  }, [checkScrollPosition]);
 
+  // Recalculate on resize
   useEffect(() => {
-    const carousel = carouselRef.current;
-    if (!carousel) return;
-
-    let ticking = false;
-    const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          checkPositionRef.current?.();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    carousel.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", checkScrollPosition, { passive: true });
     checkScrollPosition();
-
-    return () => {
-      carousel.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", checkScrollPosition);
-    };
+    window.addEventListener("resize", checkScrollPosition);
+    return () => window.removeEventListener("resize", checkScrollPosition);
   }, [checkScrollPosition, products]);
 
-  // Scroll handlers
+  // Scroll amount helper
   const getScrollAmount = useCallback(() => {
     if (typeof window === "undefined") return 300;
     if (window.innerWidth <= 480) return 180;
@@ -83,11 +75,13 @@ const TopRatedProducts: React.FC = () => {
     return 400;
   }, []);
 
+  // Scroll buttons
   const scrollLeftHandler = () => {
     carouselRef.current?.scrollBy({
       left: -getScrollAmount(),
       behavior: "smooth",
     });
+    setTimeout(checkScrollPosition, 400);
   };
 
   const scrollRightHandler = () => {
@@ -95,6 +89,7 @@ const TopRatedProducts: React.FC = () => {
       left: getScrollAmount(),
       behavior: "smooth",
     });
+    setTimeout(checkScrollPosition, 400);
   };
 
   return (
@@ -114,7 +109,7 @@ const TopRatedProducts: React.FC = () => {
             <IoIosArrowDropleft />
           </button>
 
-          <div className="carousel" ref={carouselRef}>
+          <div className="carousel" ref={carouselRef} onScroll={handleScroll}>
             {products.map((product) => (
               <Product key={product.id} product={product} />
             ))}

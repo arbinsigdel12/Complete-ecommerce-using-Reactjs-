@@ -1,4 +1,5 @@
 import React from "react";
+import "./cartitem.css";
 
 interface CartItemProps {
   item: {

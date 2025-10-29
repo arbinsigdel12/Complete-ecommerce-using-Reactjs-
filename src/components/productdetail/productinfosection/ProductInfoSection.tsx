@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { addToCartWithQuantity } from "../../store/slices/cartSlice";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
+import { addToCartWithQuantity } from "../../../store/slices/cartSlice";
+import "./productinfosection.css";
 
 interface Product {
   id: number;

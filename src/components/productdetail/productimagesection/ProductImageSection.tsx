@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./productimagesection.css";
 
 interface ProductImageSectionProps {
   image: string;
