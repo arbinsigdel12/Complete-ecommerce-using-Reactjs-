@@ -1,6 +1,6 @@
 import React from "react";
 import { FaStar, FaRegStar } from "react-icons/fa";
-import "./Product.css";
+import "./product.css";
 
 interface ProductProps {
   id: number;
