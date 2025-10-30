@@ -92,8 +92,6 @@
 .search-wrapper .search-hint {
   position: absolute;
   top: 98%;
-  left: calc(50px + 10px);
-  width: calc(100% - 40px - 20px);
   background: #fff;
   border: 1px solid var(--accent-color);
   border-top: none;
@@ -104,11 +102,9 @@
   display: none;
   z-index: 12;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-top: none;
   cursor: pointer;
   box-sizing: border-box;
 }
-
 .search-wrapper .search-hint.visible {
   display: block;
 }
