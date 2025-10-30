@@ -1,4 +1,5 @@
 .product-card {
+  position: relative;
   background: #fff;
   border-radius: 10px;
   width: 260px;
@@ -80,6 +81,29 @@
 
 .details-btn:hover {
   background-color: #007b4c;
+}
+
+.out-of-stock-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 14px;
+  z-index: 2;
+}
+.out-of-stock-btn {
+  background-color: #ccc !important;
+  cursor: not-allowed !important;
+}
+
+.out-of-stock-btn:hover {
+  background-color: #ccc !important;
+  transform: none !important;
 }
 
 @media (max-width: 860px) {

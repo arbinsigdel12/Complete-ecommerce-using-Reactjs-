@@ -2,7 +2,7 @@ import React from "react";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import "./Product.css";
-import { useAppDispatch } from "../../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { addToCart } from "../../store/slices/cartSlice";
 
 interface ProductProps {
@@ -15,6 +15,14 @@ interface ProductProps {
 
 const Product: React.FC<{ product: ProductProps }> = ({ product }) => {
   const dispatch = useAppDispatch();
+  const cartItems = useAppSelector((state) => state.cart.items);
+
+  // Calculate available stock
+  const initialStock = 10 + (product.id % 10);
+  const cartItem = cartItems.find((item) => item.id === product.id);
+  const currentCartQuantity = cartItem?.quantity || 0;
+  const availableStock = Math.max(0, initialStock - currentCartQuantity);
+  const isOutOfStock = availableStock === 0;
 
   const renderStars = (rating: number) => {
     const stars = [];
@@ -28,6 +36,8 @@ const Product: React.FC<{ product: ProductProps }> = ({ product }) => {
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    if (isOutOfStock) return;
+
     dispatch(
       addToCart({
         id: product.id,
@@ -42,6 +52,11 @@ const Product: React.FC<{ product: ProductProps }> = ({ product }) => {
     <Link to={`/product/${product.id}`} className="product-card">
       <div className="product-content">
         <img src={product.image} alt={product.title} />
+        {isOutOfStock && (
+          <div className="out-of-stock-overlay">
+            <span>Out of Stock</span>
+          </div>
+        )}
         <div className="product-info">
           <h3>{product.title}</h3>
           <p className="price">${product.price.toFixed(2)}</p>
@@ -51,8 +66,12 @@ const Product: React.FC<{ product: ProductProps }> = ({ product }) => {
           </div>
         </div>
       </div>
-      <button className="details-btn" onClick={handleAddToCart}>
-        Add to Cart
+      <button
+        className={`details-btn ${isOutOfStock ? "out-of-stock-btn" : ""}`}
+        onClick={handleAddToCart}
+        disabled={isOutOfStock}
+      >
+        {isOutOfStock ? "Out of Stock" : "Add to Cart"}
       </button>
     </Link>
   );

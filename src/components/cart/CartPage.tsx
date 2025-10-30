@@ -63,6 +63,12 @@ const CartPage: React.FC = () => {
   const shipping = subtotal > 0 ? 5.99 : 0;
   const total = subtotal + shipping - discount;
 
+  // Stock validation check
+  const hasStockError = cartItems.some((item) => {
+    const initialStock = 10 + (item.id % 10);
+    return item.quantity > initialStock;
+  });
+
   if (orderPlaced) {
     return (
       <div className="cart-wrapper">
@@ -118,6 +124,13 @@ const CartPage: React.FC = () => {
               <span>Total:</span>
               <span>${total.toFixed(2)}</span>
             </div>
+          </div>
+        )}
+
+        {hasStockError && (
+          <div className="stock-error-message">
+            Some items in your cart exceed available stock. Please update
+            quantities.
           </div>
         )}
 
@@ -184,7 +197,7 @@ const CartPage: React.FC = () => {
           <button
             type="submit"
             className="place-order-btn"
-            disabled={cartItems.length === 0}
+            disabled={cartItems.length === 0 || hasStockError}
           >
             Place Order
           </button>

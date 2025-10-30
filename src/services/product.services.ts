@@ -6,7 +6,10 @@ export const fetchAllProducts = async () => {
 };
 
 export const fetchProductsByCategory = async (category: string) => {
-  const response = await fetch(`${API_BASE}/products/category/${category}`);
+  const formattedCategory = category.toLowerCase();
+  const response = await fetch(
+    `${API_BASE}/products/category/${formattedCategory}`
+  );
   return response.json();
 };
 
