@@ -99,6 +99,7 @@
 
 .result-rating .stars {
   display: flex;
+  color: #f5a623;
 }
 
 .result-rating .star {

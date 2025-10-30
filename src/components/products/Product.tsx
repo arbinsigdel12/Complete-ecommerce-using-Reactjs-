@@ -1,5 +1,5 @@
 import React from "react";
-import { FaStar, FaRegStar } from "react-icons/fa";
+import { renderStars } from "../../utils/renderstar";
 import { Link } from "react-router-dom";
 import "./Product.css";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
@@ -23,15 +23,6 @@ const Product: React.FC<{ product: ProductProps }> = ({ product }) => {
   const currentCartQuantity = cartItem?.quantity || 0;
   const availableStock = Math.max(0, initialStock - currentCartQuantity);
   const isOutOfStock = availableStock === 0;
-
-  const renderStars = (rating: number) => {
-    const stars = [];
-    const rounded = Math.round(rating);
-    for (let i = 1; i <= 5; i++) {
-      stars.push(i <= rounded ? <FaStar key={i} /> : <FaRegStar key={i} />);
-    }
-    return stars;
-  };
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();

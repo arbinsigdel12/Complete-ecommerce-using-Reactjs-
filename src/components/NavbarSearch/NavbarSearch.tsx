@@ -8,20 +8,7 @@ import {
 } from "../../services/product.services";
 import SearchResultsDropdown from "../searchresultsdropdown/SearchResultsDropdown";
 import { fetchCategories } from "../../services/product.services";
-
-interface Product {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  category: string;
-  image: string;
-  rating: {
-    rate: number;
-    count: number;
-  };
-}
-
+import type { Product } from "../../type/Product";
 interface NavbarSearchProps {
   isMobile?: boolean;
   onSearch?: (query: string, category: string) => void;

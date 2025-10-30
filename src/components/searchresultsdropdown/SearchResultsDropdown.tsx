@@ -1,20 +1,7 @@
-// src/components/searchresultsdropdown/SearchResultsDropdown.tsx
 import React from "react";
 import "./searchresultsdropdown.css";
-import { FaRegStar, FaStar } from "react-icons/fa";
-
-interface Product {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  category: string;
-  image: string;
-  rating: {
-    rate: number;
-    count: number;
-  };
-}
+import { renderStars } from "../../utils/renderstar";
+import type { Product } from "../../type/Product";
 
 interface SearchResultsDropdownProps {
   isVisible: boolean;
@@ -38,26 +25,6 @@ const SearchResultsDropdown: React.FC<SearchResultsDropdownProps> = ({
   left,
 }) => {
   if (!isVisible) return null;
-
-  const renderStars = (rating: number) => {
-    const stars = [];
-    const fullStars = Math.floor(rating);
-    for (let i = 0; i < fullStars; i++) {
-      stars.push(
-        <span key={i} className="star full">
-          <FaStar />
-        </span>
-      );
-    }
-    for (let i = fullStars; i < 5; i++) {
-      stars.push(
-        <span key={`empty-${i}`} className="star empty">
-          <FaRegStar />
-        </span>
-      );
-    }
-    return stars;
-  };
 
   return (
     <>

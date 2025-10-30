@@ -4,19 +4,7 @@ import ProductImageSection from "./productimagesection/ProductImageSection";
 import ProductInfoSection from "./productinfosection/ProductInfoSection";
 import ProductDetailSkeleton from "../skeletonLoader/productdetail/ProductDetailsSkeletonloader";
 import "./productdetail.css";
-
-interface Product {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  category: string;
-  image: string;
-  rating: {
-    rate: number;
-    count: number;
-  };
-}
+import type { Product } from "../../type/Product";
 
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();

@@ -1,22 +1,10 @@
 import React, { useState } from "react";
-import { FaStar, FaRegStar } from "react-icons/fa";
+import { renderStars } from "../../../utils/renderstar";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { addToCartWithQuantity } from "../../../store/slices/cartSlice";
 import "./productinfosection.css";
-
-interface Product {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  category: string;
-  image: string;
-  rating: {
-    rate: number;
-    count: number;
-  };
-}
+import type { Product } from "../../../type/Product";
 
 interface ProductInfoSectionProps {
   product: Product;
@@ -34,11 +22,6 @@ const ProductInfoSection: React.FC<ProductInfoSectionProps> = ({ product }) => {
   const cartItem = cartItems.find((item) => item.id === product.id);
   const currentCartQuantity = cartItem?.quantity || 0;
   const availableStock = Math.max(0, initialStock - currentCartQuantity);
-
-  const renderStars = (rating: number) =>
-    Array.from({ length: 5 }, (_, i) =>
-      i < Math.round(rating) ? <FaStar key={i} /> : <FaRegStar key={i} />
-    );
 
   const increaseQty = () => setQuantity((q) => Math.min(q + 1, availableStock));
   const decreaseQty = () => setQuantity((q) => Math.max(q - 1, 1));
