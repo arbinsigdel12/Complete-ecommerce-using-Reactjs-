@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import "./TopRatedProducts.css";
+import "./topRatedProducts.css";
 import { IoIosArrowDropleft, IoIosArrowDropright } from "react-icons/io";
 import Product from "../products/Product";
 import SkeletonLoader from "../skeletonLoader/CarouselSkeletonloader";
