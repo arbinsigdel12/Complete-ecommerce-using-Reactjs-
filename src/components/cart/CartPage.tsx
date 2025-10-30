@@ -8,18 +8,52 @@ import {
   removeFromCart,
   clearCart,
 } from "../../store/slices/cartSlice";
+import EmailService from "../../services/EmailService";
+
+interface CartItemType {
+  title: string;
+  price: number;
+  quantity: number;
+}
 
 const CartPage: React.FC = () => {
   const cartItems = useAppSelector((state) => state.cart.items);
   const dispatch = useAppDispatch();
+
   const [orderPlaced, setOrderPlaced] = useState(false);
-  const [customerName, setCustomerName] = useState("");
-  const [formData, setFormData] = useState({
+  const [customerInfo, setCustomerInfo] = useState({
     fullName: "",
     email: "",
     phone: "",
     postalCode: "",
     address: "",
+  });
+
+  const [emailData, setEmailData] = useState<{
+    customerName: string;
+    customerEmail: string;
+    cartItems: CartItemType[];
+    total: number;
+  } | null>(null);
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setCustomerInfo((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const subtotal = cartItems.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
+  const discount = subtotal > 350 ? subtotal * 0.1 : 0;
+  const shipping = subtotal > 0 ? 5.99 : 0;
+  const total = subtotal + shipping - discount;
+
+  const hasStockError = cartItems.some((item) => {
+    const initialStock = 10 + (item.id % 10);
+    return item.quantity > initialStock;
   });
 
   const handleQuantityChange = (productId: number, newQuantity: number) => {
@@ -30,56 +64,46 @@ const CartPage: React.FC = () => {
     dispatch(removeFromCart(productId));
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setCustomerName(formData.fullName);
+    if (cartItems.length === 0 || hasStockError) return;
+
+    // Save snapshot for email
+    setEmailData({
+      customerName: customerInfo.fullName,
+      customerEmail: customerInfo.email,
+      cartItems: cartItems.map(({ title, price, quantity }) => ({
+        title,
+        price,
+        quantity,
+      })),
+      total,
+    });
+
     setOrderPlaced(true);
     dispatch(clearCart());
-    setFormData({
-      fullName: "",
-      email: "",
-      phone: "",
-      postalCode: "",
-      address: "",
-    });
   };
-
-  const subtotal = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
-
-  const discount = subtotal > 350 ? subtotal * 0.1 : 0;
-  const shipping = subtotal > 0 ? 5.99 : 0;
-  const total = subtotal + shipping - discount;
-
-  // Stock validation check
-  const hasStockError = cartItems.some((item) => {
-    const initialStock = 10 + (item.id % 10);
-    return item.quantity > initialStock;
-  });
 
   if (orderPlaced) {
     return (
       <div className="cart-wrapper">
         <div className="order-success">
           <h2>Order Completed Successfully!</h2>
-          <p>Thank you for your purchase, {customerName}!</p>
+          <p>Thank you for your purchase, {customerInfo.fullName}!</p>
           <p>Your order has been placed and will be shipped soon.</p>
           <Link to="/products">
             <button>Continue Shopping</button>
           </Link>
         </div>
+
+        {emailData && (
+          <EmailService
+            customerName={emailData.customerName}
+            customerEmail={emailData.customerEmail}
+            cartItems={emailData.cartItems}
+            total={emailData.total}
+          />
+        )}
       </div>
     );
   }
@@ -88,7 +112,6 @@ const CartPage: React.FC = () => {
     <div className="cart-wrapper">
       <div className="cart-left">
         <h3>Review Items ({cartItems.length})</h3>
-
         {cartItems.length === 0 ? (
           <p>Your cart is empty</p>
         ) : (
@@ -105,7 +128,6 @@ const CartPage: React.FC = () => {
 
       <div className="cart-right">
         <h3>Order Summary</h3>
-
         {cartItems.length > 0 && (
           <div className="order-summary">
             <div className="summary-row">
@@ -117,7 +139,7 @@ const CartPage: React.FC = () => {
               <span>${shipping.toFixed(2)}</span>
             </div>
             <div className="summary-row">
-              <span>Discount (10% for purchase more than $350):</span>
+              <span>Discount (10% for purchase greater than $350):</span>
               <span>${discount.toFixed(2)}</span>
             </div>
             <div className="summary-row total">
@@ -129,8 +151,7 @@ const CartPage: React.FC = () => {
 
         {hasStockError && (
           <div className="stock-error-message">
-            Some items in your cart exceed available stock. Please update
-            quantities.
+            Some items exceed available stock.
           </div>
         )}
 
@@ -140,60 +161,55 @@ const CartPage: React.FC = () => {
             <input
               type="text"
               name="fullName"
-              value={formData.fullName}
+              value={customerInfo.fullName}
               onChange={handleInputChange}
               placeholder="Enter full name"
               required
             />
           </div>
-
           <div className="form-group">
             <label>Email</label>
             <input
               type="email"
               name="email"
-              value={formData.email}
+              value={customerInfo.email}
               onChange={handleInputChange}
-              placeholder="Enter email address"
+              placeholder="Enter email"
               required
             />
           </div>
-
           <div className="form-group">
-            <label>Phone Number</label>
+            <label>Phone</label>
             <input
               type="text"
               name="phone"
-              value={formData.phone}
+              value={customerInfo.phone}
               onChange={handleInputChange}
-              placeholder="Enter phone number"
+              placeholder="Enter phone"
               required
             />
           </div>
-
           <div className="form-group">
             <label>Postal Code</label>
             <input
               type="text"
               name="postalCode"
-              value={formData.postalCode}
+              value={customerInfo.postalCode}
               onChange={handleInputChange}
               placeholder="Enter postal code"
               required
             />
           </div>
-
           <div className="form-group">
             <label>Address</label>
             <textarea
               name="address"
-              value={formData.address}
+              value={customerInfo.address}
               onChange={handleInputChange}
               placeholder="Enter your address"
               required
-            ></textarea>
+            />
           </div>
-
           <button
             type="submit"
             className="place-order-btn"
