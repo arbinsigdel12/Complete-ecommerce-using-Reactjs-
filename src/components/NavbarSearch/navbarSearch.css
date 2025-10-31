@@ -9,7 +9,7 @@
   flex: 1;
   max-width: 1000px;
   overflow: visible;
-  z-index: 99;
+  z-index: 98;
 }
 
 .search-section {
@@ -22,7 +22,7 @@
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid transparent;
-  z-index: 99;
+  z-index: 98;
 }
 
 .search-section:focus-within {
@@ -87,7 +87,7 @@
     display: flex;
     width: calc(100% - 40px);
     margin: 8px 20px;
-    z-index: 99;
+    z-index: 98;
   }
 }
 
