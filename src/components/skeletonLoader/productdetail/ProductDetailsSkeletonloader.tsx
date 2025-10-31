@@ -1,5 +1,5 @@
 import React from "react";
-import "./ProductDetailSkeleton.css";
+import "./productdetailskeleton.css";
 
 const ProductDetailSkeleton: React.FC = () => {
   return (
