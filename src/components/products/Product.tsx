@@ -1,7 +1,7 @@
 import React from "react";
 import { renderStars } from "../../utils/renderstar";
 import { Link } from "react-router-dom";
-import "./Product.css";
+import "./product.css";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { addToCart } from "../../store/slices/cartSlice";
 
