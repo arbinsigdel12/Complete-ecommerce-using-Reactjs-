@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import "./NavbarSearch.css";
+import "./navbarSearch.css";
 import {
   fetchAllProducts,
   fetchProductsByCategory,

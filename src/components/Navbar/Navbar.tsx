@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "./Navbar.css";
+import "./navbar.css";
 import van from "../../../public/assets/Images/navbarlogo/van.webp";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { MdOutlineAccountCircle } from "react-icons/md";

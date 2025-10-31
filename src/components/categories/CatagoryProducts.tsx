@@ -6,6 +6,7 @@ import {
 import SkeletonLoader from "../skeletonLoader/CatagoriesSkeletonloader";
 import { type Product as ProductType } from "../../type/Product";
 import ProductItem from "../products/Product";
+import "./catagories.css";
 interface CategoryProductsProps {
   category?: string;
 }
@@ -62,7 +63,6 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ category }) => {
 
   return (
     <div className="all-categories-container">
-      {/* Header and sort always visible */}
       <div className="all-categories-header">
         <div className="heading">
           <h1>{headingText}</h1>
