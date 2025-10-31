@@ -2,14 +2,8 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import "./topRatedProducts.css";
 import { IoIosArrowDropleft, IoIosArrowDropright } from "react-icons/io";
 import Product from "../products/Product";
-
-interface ProductType {
-  id: number;
-  title: string;
-  price: number;
-  image: string;
-  rating: { rate: number; count: number };
-}
+import SkeletonLoader from "../skeletonLoader/CarouselSkeletonloader";
+import { type Product as ProductType } from "../../type/Product";
 
 const TopRatedProducts: React.FC = () => {
   const [products, setProducts] = useState<ProductType[]>([]);
@@ -17,101 +11,78 @@ const TopRatedProducts: React.FC = () => {
   const [isAtStart, setIsAtStart] = useState(true);
   const [isAtEnd, setIsAtEnd] = useState(false);
   const carouselRef = useRef<HTMLDivElement | null>(null);
-  const checkPositionRef = useRef<(() => void) | null>(null);
+  const tickingRef = useRef(false);
 
-  // fetch api
+  // Fetch products once
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await fetch("https://fakestoreapi.com/products");
         const data: ProductType[] = await res.json();
-
         const filtered = data.filter(
           (item) => item.rating && item.rating.rate >= 4
         );
-
         setProducts(filtered);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
-        setTimeout(() => setLoading(false));
+        setTimeout(() => setLoading(false), 500);
       }
     };
-
     fetchData();
   }, []);
 
-  // Check scroll position to determine if we're at start or end
+  // Check scroll position (start/end)
   const checkScrollPosition = useCallback(() => {
     const carousel = carouselRef.current;
     if (!carousel) return;
 
     const { scrollLeft, scrollWidth, clientWidth } = carousel;
-
-    // Check if at start (with a small buffer for rounding errors)
     setIsAtStart(scrollLeft <= 5);
-
-    // Check if at end (with a small buffer for rounding errors)
     setIsAtEnd(scrollLeft + clientWidth >= scrollWidth - 5);
   }, []);
 
-  // Store the function in ref for the event listener
-  checkPositionRef.current = checkScrollPosition;
+  // Throttled scroll handler using ref
+  const handleScroll = useCallback(() => {
+    if (!tickingRef.current) {
+      tickingRef.current = true;
+      requestAnimationFrame(() => {
+        checkScrollPosition();
+        tickingRef.current = false;
+      });
+    }
+  }, [checkScrollPosition]);
 
-  // Check the scroll position according to responsivness and add arrow accordingly
+  // Recalculate on resize
   useEffect(() => {
-    const carousel = carouselRef.current;
-    if (!carousel) return;
-
-    let ticking = false;
-
-    const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          checkPositionRef.current?.();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    carousel.addEventListener("scroll", handleScroll, { passive: true });
-    const handleResize = () => {
-      checkScrollPosition();
-    };
-
-    window.addEventListener("resize", handleResize, { passive: true });
-
-    // Initial check
     checkScrollPosition();
-
-    return () => {
-      carousel.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleResize);
-    };
+    window.addEventListener("resize", checkScrollPosition);
+    return () => window.removeEventListener("resize", checkScrollPosition);
   }, [checkScrollPosition, products]);
 
-  // Responsive scroll amount based on screen width
+  // Scroll amount helper
   const getScrollAmount = useCallback(() => {
     if (typeof window === "undefined") return 300;
-
-    if (window.innerWidth <= 480) {
-      return 180;
-    } else if (window.innerWidth <= 860) {
-      return 250;
-    } else {
-      return 400;
-    }
+    if (window.innerWidth <= 480) return 180;
+    if (window.innerWidth <= 860) return 250;
+    return 400;
   }, []);
 
+  // Scroll buttons
   const scrollLeftHandler = () => {
-    const scrollAmount = getScrollAmount();
-    carouselRef.current?.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    carouselRef.current?.scrollBy({
+      left: -getScrollAmount(),
+      behavior: "smooth",
+    });
+    setTimeout(checkScrollPosition, 400);
   };
 
   const scrollRightHandler = () => {
-    const scrollAmount = getScrollAmount();
-    carouselRef.current?.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    carouselRef.current?.scrollBy({
+      left: getScrollAmount(),
+      behavior: "smooth",
+    });
+    setTimeout(checkScrollPosition, 400);
   };
 
   return (
@@ -119,10 +90,7 @@ const TopRatedProducts: React.FC = () => {
       <h2>Top Rated Products</h2>
 
       {loading ? (
-        <div className="loader-container">
-          <div className="spinner"></div>
-          <p>Loading top-rated products...</p>
-        </div>
+        <SkeletonLoader />
       ) : products.length === 0 ? (
         <p className="no-products">No top-rated products found.</p>
       ) : (
@@ -134,7 +102,7 @@ const TopRatedProducts: React.FC = () => {
             <IoIosArrowDropleft />
           </button>
 
-          <div className="carousel" ref={carouselRef}>
+          <div className="carousel" ref={carouselRef} onScroll={handleScroll}>
             {products.map((product) => (
               <Product key={product.id} product={product} />
             ))}

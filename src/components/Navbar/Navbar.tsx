@@ -1,50 +1,42 @@
 import React, { useState, useEffect } from "react";
-import "./navbar.css";
+import { Link } from "react-router-dom";
+import "./Navbar.css";
 import van from "../../../public/assets/Images/navbarlogo/van.webp";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { LiaCartPlusSolid } from "react-icons/lia";
 import { CiPhone } from "react-icons/ci";
 import NavbarSearch from "../NavbarSearch/NavbarSearch";
+import { useAppSelector } from "../../hooks/redux";
+import { fetchCategories } from "../../services/product.services";
 
 const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [categories, setCategories] = useState<string[]>([]);
+  const cartItems = useAppSelector((state) => state.cart.items);
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+  const getTotalItems = () =>
+    cartItems.reduce((total, item) => total + item.quantity, 0);
 
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-  };
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
-  //Close menu sidebar when clicked to overlay
+  // Fetch categories from API
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (
-        isMobileMenuOpen &&
-        target.classList.contains("mobile-menu-overlay")
-      ) {
-        setIsMobileMenuOpen(false);
+    const getCategories = async () => {
+      try {
+        const data = await fetchCategories();
+        setCategories(data);
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
       }
     };
+    getCategories();
+  }, []);
 
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, [isMobileMenuOpen]);
-
-  // Make overlay not scrollable when sidebar is active
+  // Prevent scrolling when mobile menu is open
   useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-
-    return () => {
-      document.body.style.overflow = "unset";
-    };
+    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "unset";
   }, [isMobileMenuOpen]);
 
   return (
@@ -62,7 +54,9 @@ const Navbar: React.FC = () => {
         </div>
         <div className="top-center">
           <span>Get 50% off on selected items |</span>
-          <a href="#">Shop Now</a>
+          <Link to="/products">
+            <button>Shop Now</button>
+          </Link>
         </div>
         <div className="top-right">
           <select name="eng">
@@ -76,10 +70,6 @@ const Navbar: React.FC = () => {
             <option value="bhtn">Bhutan</option>
           </select>
         </div>
-        <div className="top-center-mobile">
-          <span>Get 50% off on selected items | </span>
-          <a href="#">Shop Now</a>
-        </div>
       </div>
 
       <nav className="navbar">
@@ -92,12 +82,12 @@ const Navbar: React.FC = () => {
             <FaBars />
           </button>
 
-          <div className="logo-section">
+          <Link to="/" className="logo-section">
             <div className="logo-placeholder">
               <img src={van} alt="ClickCart Logo" />
             </div>
             <p>ClickCart</p>
-          </div>
+          </Link>
         </div>
 
         <NavbarSearch />
@@ -107,13 +97,14 @@ const Navbar: React.FC = () => {
             <MdOutlineAccountCircle />
             <span>Account</span>
           </div>
-          <div className="cart">
+
+          <Link to="/cart" className="cart">
             <LiaCartPlusSolid />
             <span>Cart</span>
             <div className="counter-circle">
-              <p className="cart-counter">1</p>
+              <p className="cart-counter">{getTotalItems()}</p>
             </div>
-          </div>
+          </Link>
         </div>
       </nav>
 
@@ -133,24 +124,35 @@ const Navbar: React.FC = () => {
 
         <div className="mobile-menu-items">
           <h4 className="mobile-menu-subheading">Categories</h4>
-
           <ul>
-            <li onClick={closeMobileMenu}>All</li>
-            <li onClick={closeMobileMenu}>Electronics</li>
-            <li onClick={closeMobileMenu}>Jewellery</li>
-            <li onClick={closeMobileMenu}>Men's Clothing</li>
-            <li onClick={closeMobileMenu}>Women's Clothing</li>
+            <li>
+              <Link to="/products" onClick={closeMobileMenu}>
+                All
+              </Link>
+            </li>
+            {categories.map((cat) => (
+              <li key={cat}>
+                <Link to={`/category/${cat}`} onClick={closeMobileMenu}>
+                  {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
 
       <div className="category-bar">
         <ul>
-          <li>All</li>
-          <li>Electronics</li>
-          <li>Jewellery</li>
-          <li>Men's Clothing</li>
-          <li>Women's Clothing</li>
+          <li>
+            <Link to="/products">All</Link>
+          </li>
+          {categories.map((cat) => (
+            <li key={cat}>
+              <Link to={`/category/${cat}`}>
+                {cat.charAt(0).toUpperCase() + cat.slice(1)}
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
     </>

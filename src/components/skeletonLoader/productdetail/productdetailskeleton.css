@@ -1,0 +1,116 @@
+.skeleton-main-image-container,
+.skeleton-thumbnail-wrapper,
+.skeleton-main-image,
+.skeleton-thumbnail-image,
+.skeleton-title,
+.skeleton-description-line,
+.skeleton-rating,
+.skeleton-price,
+.skeleton-monthly,
+.skeleton-quantity-button,
+.skeleton-quantity-number,
+.skeleton-stock-info,
+.skeleton-button {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e6e6e6 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 6px;
+}
+
+.skeleton-main-image-container {
+  width: 100%;
+  max-width: 450px;
+  height: 450px;
+  margin-bottom: 15px;
+}
+
+.skeleton-thumbnail-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.skeleton-thumbnail-wrapper {
+  width: 60px;
+  height: 60px;
+}
+
+.skeleton-title {
+  height: 28px;
+  width: 80%;
+  margin-bottom: 15px;
+}
+
+.skeleton-description-line {
+  height: 16px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.skeleton-description-line.medium {
+  width: 95%;
+}
+
+.skeleton-description-line.short {
+  width: 85%;
+  margin-bottom: 15px;
+}
+
+.skeleton-rating {
+  height: 20px;
+  width: 120px;
+  margin-bottom: 15px;
+}
+
+.skeleton-price {
+  height: 32px;
+  width: 100px;
+  margin-bottom: 8px;
+}
+
+.skeleton-monthly {
+  height: 18px;
+  width: 150px;
+  margin-bottom: 20px;
+}
+
+.skeleton-quantity-section {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.skeleton-quantity-button {
+  width: 35px;
+  height: 35px;
+}
+
+.skeleton-quantity-number {
+  width: 30px;
+  height: 25px;
+}
+
+.skeleton-stock-info {
+  height: 18px;
+  width: 180px;
+  margin-bottom: 20px;
+}
+
+.skeleton-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.skeleton-button {
+  width: 120px;
+  height: 44px;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

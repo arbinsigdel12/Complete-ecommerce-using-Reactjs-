@@ -1,18 +1,29 @@
-import Footer from "./components/footer/Footer.tsx";
-import Hero from "./components/hero/Hero.tsx";
-import Navbar from "./components/Navbar/Navbar.tsx";
-import ShopCategories from "./components/shopCategories/ShopCategories.tsx";
-import TopRatedProducts from "./components/topProduct/TopRatedProducts.tsx";
+import { Routes, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+import Footer from "./components/footer/Footer";
+import Navbar from "./components/Navbar/Navbar";
+import HomePage from "./pages/HomePage";
+import CategoryPage from "./pages/CategoryPage";
+import ProductDetail from "./components/productdetail/ProductDetail";
+import CartPage from "./components/cart/CartPage";
+import AllCategories from "./components/categories/CatagoryProducts";
+import { store } from "./store";
 
 function App() {
   return (
-    <>
+    <Provider store={store}>
       <Navbar />
-      <Hero />
-      <TopRatedProducts />
-      <ShopCategories />
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/products" element={<AllCategories category="all" />} />
+          <Route path="/category/:category" element={<CategoryPage />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/cart" element={<CartPage />} />
+        </Routes>
+      </div>
       <Footer />
-    </>
+    </Provider>
   );
 }
 

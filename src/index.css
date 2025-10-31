@@ -22,7 +22,9 @@
 }
 
 /* ========== Global Reset ========== */
-* {
+*,
+::before,
+::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -32,4 +34,8 @@
 body {
   background-color: var(--bg-color);
   line-height: 1.5;
+}
+
+.App {
+  min-height: 100vh;
 }
