@@ -1,5 +1,4 @@
 import React from "react";
-import "../categories/catagories.css";
 
 const SkeletonLoader: React.FC<{ count?: number }> = ({ count = 8 }) => (
   <div className="skeleton-grid">
