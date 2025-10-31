@@ -1,19 +1,12 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-
-export interface CartItem {
-  id: number;
-  title: string;
-  price: number;
-  image: string;
-  quantity: number;
-}
+import { type CartProduct, type Product } from "../../type/Product";
 
 interface CartState {
-  items: CartItem[];
+  items: CartProduct[];
 }
 
 // Load cart from localStorage
-const loadCartFromStorage = (): CartItem[] => {
+const loadCartFromStorage = (): CartProduct[] => {
   if (typeof window === "undefined") return [];
   const savedCart = localStorage.getItem("cart");
   return savedCart ? JSON.parse(savedCart) : [];
@@ -27,7 +20,7 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addToCart: (state, action: PayloadAction<Omit<CartItem, "quantity">>) => {
+    addToCart: (state, action: PayloadAction<Product>) => {
       const existingItem = state.items.find(
         (item) => item.id === action.payload.id
       );
@@ -45,7 +38,7 @@ const cartSlice = createSlice({
     addToCartWithQuantity: (
       state,
       action: PayloadAction<{
-        product: Omit<CartItem, "quantity">;
+        product: Product;
         quantity: number;
       }>
     ) => {

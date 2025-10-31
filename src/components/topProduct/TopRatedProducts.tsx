@@ -3,14 +3,7 @@ import "./topRatedProducts.css";
 import { IoIosArrowDropleft, IoIosArrowDropright } from "react-icons/io";
 import Product from "../products/Product";
 import SkeletonLoader from "../skeletonLoader/CarouselSkeletonloader";
-
-interface ProductType {
-  id: number;
-  title: string;
-  price: number;
-  image: string;
-  rating: { rate: number; count: number };
-}
+import { type Product as ProductType } from "../../type/Product";
 
 const TopRatedProducts: React.FC = () => {
   const [products, setProducts] = useState<ProductType[]>([]);

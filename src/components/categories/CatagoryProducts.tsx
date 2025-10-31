@@ -1,19 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Product from "../products/Product";
 import {
   fetchAllProducts,
   fetchProductsByCategory,
 } from "../../services/product.services";
 import SkeletonLoader from "../skeletonLoader/CatagoriesSkeletonloader";
-
-interface ProductType {
-  id: number;
-  title: string;
-  price: number;
-  image: string;
-  rating: { rate: number; count: number };
-}
-
+import { type Product as ProductType } from "../../type/Product";
+import ProductItem from "../products/Product";
 interface CategoryProductsProps {
   category?: string;
 }
@@ -94,7 +86,7 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ category }) => {
           ))
         ) : sortedProducts.length > 0 ? (
           sortedProducts.map((product) => (
-            <Product key={product.id} product={product} />
+            <ProductItem key={product.id} product={product} />
           ))
         ) : (
           <p className="no-products">No products found in this category.</p>

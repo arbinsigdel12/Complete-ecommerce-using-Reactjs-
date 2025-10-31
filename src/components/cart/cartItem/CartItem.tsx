@@ -1,14 +1,9 @@
 import React from "react";
 import "./cartitem.css";
+import { type CartProduct } from "../../../type/Product";
 
 interface CartItemProps {
-  item: {
-    id: number;
-    title: string;
-    price: number;
-    image: string;
-    quantity: number;
-  };
+  item: CartProduct;
   onQuantityChange: (productId: number, newQuantity: number) => void;
   onRemove: (productId: number) => void;
 }

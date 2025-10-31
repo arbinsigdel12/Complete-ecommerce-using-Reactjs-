@@ -9,12 +9,7 @@ import {
   clearCart,
 } from "../../store/slices/cartSlice";
 import EmailService from "../../services/EmailService";
-
-interface CartItemType {
-  title: string;
-  price: number;
-  quantity: number;
-}
+import { type CartProduct as CartItemType } from "../../type/Product";
 
 const CartPage: React.FC = () => {
   const cartItems = useAppSelector((state) => state.cart.items);
@@ -72,11 +67,7 @@ const CartPage: React.FC = () => {
     setEmailData({
       customerName: customerInfo.fullName,
       customerEmail: customerInfo.email,
-      cartItems: cartItems.map(({ title, price, quantity }) => ({
-        title,
-        price,
-        quantity,
-      })),
+      cartItems: cartItems,
       total,
     });
 

@@ -4,16 +4,9 @@ import { Link } from "react-router-dom";
 import "./product.css";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { addToCart } from "../../store/slices/cartSlice";
+import { type Product } from "../../type/Product";
 
-interface ProductProps {
-  id: number;
-  title: string;
-  price: number;
-  image: string;
-  rating: { rate: number; count: number };
-}
-
-const Product: React.FC<{ product: ProductProps }> = ({ product }) => {
+const ProductItem: React.FC<{ product: Product }> = ({ product }) => {
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector((state) => state.cart.items);
 
@@ -29,14 +22,7 @@ const Product: React.FC<{ product: ProductProps }> = ({ product }) => {
     e.stopPropagation();
     if (isOutOfStock) return;
 
-    dispatch(
-      addToCart({
-        id: product.id,
-        title: product.title,
-        price: product.price,
-        image: product.image,
-      })
-    );
+    dispatch(addToCart(product));
   };
 
   return (
@@ -68,4 +54,4 @@ const Product: React.FC<{ product: ProductProps }> = ({ product }) => {
   );
 };
 
-export default Product;
+export default ProductItem;

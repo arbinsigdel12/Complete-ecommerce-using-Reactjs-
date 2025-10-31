@@ -1,16 +1,11 @@
 import React, { useEffect } from "react";
 import emailjs from "@emailjs/browser";
-
-interface CartItem {
-  title: string;
-  price: number;
-  quantity: number;
-}
+import { type CartProduct } from "../type/Product";
 
 interface EmailServiceProps {
   customerName: string;
   customerEmail: string;
-  cartItems: CartItem[];
+  cartItems: CartProduct[];
   total: number;
 }
 

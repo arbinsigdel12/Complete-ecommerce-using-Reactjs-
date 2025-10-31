@@ -9,7 +9,7 @@
   flex: 1;
   max-width: 1000px;
   overflow: visible;
-  z-index: 10020;
+  z-index: 99;
 }
 
 .search-section {
@@ -22,7 +22,7 @@
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid transparent;
-  z-index: 100000;
+  z-index: 99;
 }
 
 .search-section:focus-within {
@@ -67,7 +67,7 @@
   min-width: 44px;
   line-height: 0;
   flex-shrink: 0;
-  z-index: 10023;
+  z-index: 99;
 }
 
 .search-section .search-btn:hover {
@@ -87,7 +87,7 @@
     display: flex;
     width: calc(100% - 40px);
     margin: 8px 20px;
-    z-index: 10020;
+    z-index: 99;
   }
 }
 

@@ -31,17 +31,7 @@ const ProductInfoSection: React.FC<ProductInfoSectionProps> = ({ product }) => {
       setNotice(`Only ${availableStock} items available.`);
       return;
     }
-    dispatch(
-      addToCartWithQuantity({
-        product: {
-          id: product.id,
-          title: product.title,
-          price: product.price,
-          image: product.image,
-        },
-        quantity,
-      })
-    );
+    dispatch(addToCartWithQuantity({ product: product, quantity }));
     setQuantity(1);
     setNotice("");
     if (navigateAfter) navigate("/cart");
