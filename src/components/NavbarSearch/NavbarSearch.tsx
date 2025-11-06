@@ -34,12 +34,18 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({
     if (searchQuery.trim() === "") {
       setFilteredProducts([]);
     } else {
-      const filtered = product.data.filter((p) =>
-        p.title.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+      const filtered = product.data.filter((p) => {
+        const matchesQuery = p.title
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase());
+        const matchesCategory =
+          selectedCategory === "All" ||
+          p.category.toLowerCase() === selectedCategory.toLowerCase();
+        return matchesQuery && matchesCategory;
+      });
       setFilteredProducts(filtered.slice(0, 5));
     }
-  }, [searchQuery, product]);
+  }, [searchQuery, selectedCategory, product]);
 
   const adjustSelectWidth = useCallback(() => {
     const select = selectRef.current;

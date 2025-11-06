@@ -10,24 +10,17 @@ import {
   fetchAllProducts,
   fetchCategories,
 } from "./store/slices/fetchapiSlice";
-import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "./store";
+import { useDispatch } from "react-redux";
 import { useEffect } from "react";
+import type { AppDispatch } from "./store";
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
-  const { product, categories } = useSelector(
-    (state: RootState) => state.fetchapi
-  );
 
   useEffect(() => {
-    if (product.status === "idle") {
-      dispatch(fetchAllProducts());
-    }
-    if (categories.status === "idle") {
-      dispatch(fetchCategories());
-    }
-  }, [dispatch, product.status, categories.status]);
+    dispatch(fetchAllProducts());
+    dispatch(fetchCategories());
+  }, [dispatch]);
   return (
     <>
       <Navbar />

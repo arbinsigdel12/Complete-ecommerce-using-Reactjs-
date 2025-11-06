@@ -23,14 +23,10 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ category }) => {
 
   // Load products from Redux
   useEffect(() => {
-    console.log(category, productByCategory.status);
-    if (!category || category === "all") {
-      return;
-    } else {
-      if (category && productByCategory.status === "idle")
-        dispatch(fetchProductsByCategory(category));
+    if (category && category !== "all") {
+      dispatch(fetchProductsByCategory(category));
     }
-  }, [category, dispatch, productByCategory.status]);
+  }, [category, dispatch]);
 
   // Sync with Redux data
   useEffect(() => {
