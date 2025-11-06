@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import { Provider } from "react-redux";
 import Footer from "./components/footer/Footer";
 import Navbar from "./components/Navbar/Navbar";
 import HomePage from "./pages/HomePage";
@@ -7,11 +6,30 @@ import CategoryPage from "./pages/CategoryPage";
 import ProductDetail from "./components/productdetail/ProductDetail";
 import CartPage from "./components/cart/CartPage";
 import AllCategories from "./components/categories/CatagoryProducts";
-import { store } from "./store";
+import {
+  fetchAllProducts,
+  fetchCategories,
+} from "./store/slices/fetchapiSlice";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "./store";
+import { useEffect } from "react";
 
 function App() {
+  const dispatch = useDispatch<AppDispatch>();
+  const { product, categories } = useSelector(
+    (state: RootState) => state.fetchapi
+  );
+
+  useEffect(() => {
+    if (product.status === "idle") {
+      dispatch(fetchAllProducts());
+    }
+    if (categories.status === "idle") {
+      dispatch(fetchCategories());
+    }
+  }, [dispatch, product.status, categories.status]);
   return (
-    <Provider store={store}>
+    <>
       <Navbar />
       <div className="App">
         <Routes>
@@ -23,7 +41,7 @@ function App() {
         </Routes>
       </div>
       <Footer />
-    </Provider>
+    </>
   );
 }
 
