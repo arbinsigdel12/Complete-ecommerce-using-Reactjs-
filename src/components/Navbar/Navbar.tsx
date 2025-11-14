@@ -8,11 +8,14 @@ import { LiaCartPlusSolid } from "react-icons/lia";
 import { CiPhone } from "react-icons/ci";
 import NavbarSearch from "../NavbarSearch/NavbarSearch";
 import { useAppSelector } from "../../hooks/redux";
-import { fetchCategories } from "../../services/product.services";
+import type { RootState } from "../../store";
+import { useSelector } from "react-redux";
 
 const Navbar: React.FC = () => {
+  // categories from Redux store
+  const { categories } = useSelector((state: RootState) => state.fetchapi);
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [categories, setCategories] = useState<string[]>([]);
   const cartItems = useAppSelector((state) => state.cart.items);
 
   const getTotalItems = () =>
@@ -21,23 +24,12 @@ const Navbar: React.FC = () => {
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
-  // Fetch categories from API
-  useEffect(() => {
-    const getCategories = async () => {
-      try {
-        const data = await fetchCategories();
-        setCategories(data);
-      } catch (error) {
-        console.error("Failed to fetch categories:", error);
-      }
-    };
-    getCategories();
-  }, []);
-
   // Prevent scrolling when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = isMobileMenuOpen ? "hidden" : "unset";
   }, [isMobileMenuOpen]);
+
+  const categoryList = categories.data || [];
 
   return (
     <>
@@ -46,6 +38,7 @@ const Navbar: React.FC = () => {
         onClick={closeMobileMenu}
       />
 
+      {/* Top bar */}
       <div className="top-bar">
         <div className="top-left">
           <span className="cellphone">
@@ -72,6 +65,7 @@ const Navbar: React.FC = () => {
         </div>
       </div>
 
+      {/* Navbar */}
       <nav className="navbar">
         <div className="logowrapper">
           <button
@@ -110,6 +104,7 @@ const Navbar: React.FC = () => {
 
       <NavbarSearch isMobile={true} />
 
+      {/* Mobile Menu */}
       <div className={`mobile-menu ${isMobileMenuOpen ? "active" : ""}`}>
         <div className="mobile-menu-header">
           <h3>Menu</h3>
@@ -130,7 +125,7 @@ const Navbar: React.FC = () => {
                 All
               </Link>
             </li>
-            {categories.map((cat) => (
+            {categoryList.map((cat) => (
               <li key={cat}>
                 <Link to={`/category/${cat}`} onClick={closeMobileMenu}>
                   {cat.charAt(0).toUpperCase() + cat.slice(1)}
@@ -141,12 +136,13 @@ const Navbar: React.FC = () => {
         </div>
       </div>
 
+      {/* Desktop Category Bar */}
       <div className="category-bar">
         <ul>
           <li>
             <Link to="/products">All</Link>
           </li>
-          {categories.map((cat) => (
+          {categoryList.map((cat) => (
             <li key={cat}>
               <Link to={`/category/${cat}`}>
                 {cat.charAt(0).toUpperCase() + cat.slice(1)}

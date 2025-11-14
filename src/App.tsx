@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import { Provider } from "react-redux";
 import Footer from "./components/footer/Footer";
 import Navbar from "./components/Navbar/Navbar";
 import HomePage from "./pages/HomePage";
@@ -7,11 +6,23 @@ import CategoryPage from "./pages/CategoryPage";
 import ProductDetail from "./components/productdetail/ProductDetail";
 import CartPage from "./components/cart/CartPage";
 import AllCategories from "./components/categories/CatagoryProducts";
-import { store } from "./store";
+import {
+  fetchAllProducts,
+  fetchCategories,
+} from "./store/slices/fetchapiSlice";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import type { AppDispatch } from "./store";
 
 function App() {
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(fetchAllProducts());
+    dispatch(fetchCategories());
+  }, [dispatch]);
   return (
-    <Provider store={store}>
+    <>
       <Navbar />
       <div className="App">
         <Routes>
@@ -23,7 +34,7 @@ function App() {
         </Routes>
       </div>
       <Footer />
-    </Provider>
+    </>
   );
 }
 

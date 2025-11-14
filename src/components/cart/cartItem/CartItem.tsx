@@ -1,6 +1,7 @@
 import React from "react";
 import "./cartitem.css";
 import { type CartProduct } from "../../../type/Product";
+import { useNavigate } from "react-router-dom";
 
 interface CartItemProps {
   item: CartProduct;
@@ -13,6 +14,7 @@ const CartItem: React.FC<CartItemProps> = ({
   onQuantityChange,
   onRemove,
 }) => {
+  const navigate = useNavigate();
   // Calculate available stock (same logic as other components)
   const initialStock = 10 + (item.id % 10);
   const availableStock = Math.max(0, initialStock);
@@ -21,7 +23,12 @@ const CartItem: React.FC<CartItemProps> = ({
 
   return (
     <div className="cart-item">
-      <img src={item.image} alt={item.title} />
+      <img
+        src={item.image}
+        alt={item.title}
+        onClick={() => navigate(`/product/${item.id}`)}
+        style={{ cursor: "pointer" }}
+      />
       {isOutOfStock && <div className="out-of-stock-badge">Out of Stock</div>}
       <div className="cart-item-info">
         <h4>{item.title}</h4>

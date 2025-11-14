@@ -2,13 +2,10 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import "./navbarSearch.css";
-import {
-  fetchAllProducts,
-  fetchProductsByCategory,
-} from "../../services/product.services";
 import SearchResultsDropdown from "../searchresultsdropdown/SearchResultsDropdown";
-import { fetchCategories } from "../../services/product.services";
 import type { Product } from "../../type/Product";
+import type { RootState } from "../../store";
+import { useSelector } from "react-redux";
 interface NavbarSearchProps {
   isMobile?: boolean;
   onSearch?: (query: string, category: string) => void;
@@ -18,14 +15,14 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({
   isMobile = false,
   onSearch,
 }) => {
+  const { product, categories } = useSelector(
+    (state: RootState) => state.fetchapi
+  );
   const navigate = useNavigate();
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const [categories, setCategories] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [dropdownWidth, setDropdownWidth] = useState<number>(0);
   const [dropdownLeft, setDropdownLeft] = useState<number>(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -34,48 +31,21 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const loadProducts = async () => {
-      setIsLoading(true);
-      try {
-        let data: Product[];
-        if (selectedCategory === "All") {
-          data = await fetchAllProducts();
-        } else {
-          data = await fetchProductsByCategory(selectedCategory.toLowerCase());
-        }
-        setProducts(data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    loadProducts();
-  }, [selectedCategory]);
-
-  // Fetch categories from API
-  useEffect(() => {
-    const getCategories = async () => {
-      try {
-        const data = await fetchCategories();
-        setCategories(data);
-      } catch (error) {
-        console.error("Failed to fetch categories:", error);
-      }
-    };
-    getCategories();
-  }, []);
-
-  useEffect(() => {
     if (searchQuery.trim() === "") {
       setFilteredProducts([]);
     } else {
-      const filtered = products.filter((p) =>
-        p.title.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+      const filtered = product.data.filter((p) => {
+        const matchesQuery = p.title
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase());
+        const matchesCategory =
+          selectedCategory === "All" ||
+          p.category.toLowerCase() === selectedCategory.toLowerCase();
+        return matchesQuery && matchesCategory;
+      });
       setFilteredProducts(filtered.slice(0, 5));
     }
-  }, [searchQuery, products]);
+  }, [searchQuery, selectedCategory, product]);
 
   const adjustSelectWidth = useCallback(() => {
     const select = selectRef.current;
@@ -129,7 +99,7 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({
       return;
     }
     if (searchQuery.trim()) {
-      const matched = products.find((p) =>
+      const matched = product.data.find((p) =>
         p.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
       if (matched) navigate(`/product/${matched.id}`);
@@ -142,7 +112,7 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({
       if (filteredProducts.length > 0) {
         navigate(`/product/${filteredProducts[0].id}`);
       } else if (searchQuery.trim()) {
-        const matched = products.find((p) =>
+        const matched = product.data.find((p) =>
           p.title.toLowerCase().includes(searchQuery.toLowerCase())
         );
         if (matched) navigate(`/product/${matched.id}`);
@@ -187,7 +157,7 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({
             onChange={handleSelectChange}
           >
             <option>All</option>
-            {categories.map((cat) => (
+            {categories.data.map((cat) => (
               <option key={cat}>
                 {cat.charAt(0).toUpperCase() + cat.slice(1)}
               </option>
@@ -212,7 +182,7 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({
         </div>
         <SearchResultsDropdown
           isVisible={isSearchFocused}
-          isLoading={isLoading}
+          isLoading={false}
           searchQuery={searchQuery}
           filteredProducts={filteredProducts}
           onProductClick={handleProductClick}

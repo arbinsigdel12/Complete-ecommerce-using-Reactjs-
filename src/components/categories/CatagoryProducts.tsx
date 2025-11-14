@@ -1,48 +1,52 @@
 import React, { useEffect, useState } from "react";
-import {
-  fetchAllProducts,
-  fetchProductsByCategory,
-} from "../../services/product.services";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState, AppDispatch } from "../../store";
+import { fetchProductsByCategory } from "../../store/slices/fetchapiSlice";
 import SkeletonLoader from "../skeletonLoader/CatagoriesSkeletonloader";
 import { type Product as ProductType } from "../../type/Product";
 import ProductItem from "../products/Product";
 import "./catagories.css";
+
 interface CategoryProductsProps {
   category?: string;
 }
 
 const CategoryProducts: React.FC<CategoryProductsProps> = ({ category }) => {
-  const [products, setProducts] = useState<ProductType[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { product, productByCategory } = useSelector(
+    (state: RootState) => state.fetchapi
+  );
+
   const [sortedProducts, setSortedProducts] = useState<ProductType[]>([]);
-  const [loading, setLoading] = useState(true);
   const [sortOption, setSortOption] = useState("best-match");
 
+  // Load products from Redux
   useEffect(() => {
-    const loadProducts = async () => {
-      setLoading(true);
-      try {
-        let data: ProductType[] = [];
-        if (!category || category === "all") {
-          data = await fetchAllProducts();
-        } else {
-          data = await fetchProductsByCategory(category);
-        }
-        setProducts(data);
-        setSortedProducts(data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadProducts();
-  }, [category]);
+    if (category && category !== "all") {
+      dispatch(fetchProductsByCategory(category));
+    }
+  }, [category, dispatch]);
 
+  // Sync with Redux data
+  useEffect(() => {
+    const productsData =
+      !category || category === "all" ? product.data : productByCategory.data;
+
+    setSortedProducts(productsData);
+  }, [product.data, productByCategory.data, category]);
+
+  const loading =
+    !category || category === "all"
+      ? product.status === "loading"
+      : productByCategory.status === "loading";
+
+  // Sorting logic
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selected = e.target.value;
     setSortOption(selected);
 
-    let sorted = [...products];
+    let sorted = [...sortedProducts];
 
     if (selected === "price-low-to-high") {
       sorted.sort((a, b) => a.price - b.price);
@@ -51,7 +55,10 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ category }) => {
     } else if (selected === "top-rated") {
       sorted.sort((a, b) => b.rating.rate - a.rating.rate);
     } else {
-      sorted = [...products];
+      // reset to default ordering
+      const productsData =
+        !category || category === "all" ? product.data : productByCategory.data;
+      sorted = [...productsData];
     }
 
     setSortedProducts(sorted);
@@ -78,7 +85,6 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ category }) => {
         </div>
       </div>
 
-      {/* Products grid or skeleton */}
       <div className="products-grid">
         {loading ? (
           Array.from({ length: 8 }).map((_, index) => (
