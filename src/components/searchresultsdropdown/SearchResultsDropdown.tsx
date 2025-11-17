@@ -12,6 +12,7 @@ interface SearchResultsDropdownProps {
   onClose: () => void;
   width: number;
   left: number;
+  isSearchLoading: boolean;
 }
 
 const SearchResultsDropdown: React.FC<SearchResultsDropdownProps> = ({
@@ -23,23 +24,30 @@ const SearchResultsDropdown: React.FC<SearchResultsDropdownProps> = ({
   onClose,
   width,
   left,
+  isSearchLoading,
 }) => {
   if (!isVisible) return null;
-
-  return (
-    <>
-      <div className="search-results-dropdown-overlay" onClick={onClose} />
-      <div
-        className="search-results-dropdown"
-        style={{
-          left: `${left}px`,
-          width: width > 0 ? `${width}px` : "100%",
-        }}
-        onMouseDown={(e) => e.stopPropagation()}
-      >
-        {isLoading ? (
-          <div className="search-loading">Loading products...</div>
-        ) : searchQuery && filteredProducts.length > 0 ? (
+  const searchDropdown = () => {
+    if (isLoading) {
+      return <div className="search-loading">Loading products...</div>;
+    }
+    if (searchQuery) {
+      if (isSearchLoading) {
+        return (
+          <div className="no-results">
+            <span>Searching for "{searchQuery}"</span>
+          </div>
+        );
+      }
+      if (filteredProducts.length === 0) {
+        return (
+          <div className="no-results">
+            <span>No result found for "{searchQuery}"</span>
+          </div>
+        );
+      }
+      if (filteredProducts.length > 0) {
+        return (
           <div className="search-results">
             {filteredProducts.map((product) => (
               <div
@@ -71,15 +79,28 @@ const SearchResultsDropdown: React.FC<SearchResultsDropdownProps> = ({
               {filteredProducts[0]?.title}"
             </div>
           </div>
-        ) : searchQuery && filteredProducts.length === 0 ? (
-          <div className="no-results">
-            No products found matching "{searchQuery}"
-          </div>
-        ) : (
-          <div className="search-initial-hint">
-            Start typing to search products...
-          </div>
-        )}
+        );
+      }
+    }
+
+    return (
+      <div className="search-initial-hint">
+        Start typing to search products...
+      </div>
+    );
+  };
+  return (
+    <>
+      <div className="search-results-dropdown-overlay" onClick={onClose} />
+      <div
+        className="search-results-dropdown"
+        style={{
+          left: `${left}px`,
+          width: width > 0 ? `${width}px` : "100%",
+        }}
+        onMouseDown={(e) => e.stopPropagation()}
+      >
+        {searchDropdown()}
       </div>
     </>
   );

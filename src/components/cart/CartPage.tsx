@@ -62,6 +62,7 @@ const CartPage: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (cartItems.length === 0 || hasStockError) return;
+    window.scrollTo({ top: 0, behavior: "smooth" });
 
     // Save snapshot for email
     setEmailData({

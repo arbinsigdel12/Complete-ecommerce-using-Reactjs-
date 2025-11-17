@@ -18,13 +18,23 @@ const EmailService: React.FC<EmailServiceProps> = ({
   useEffect(() => {
     if (!customerEmail || cartItems.length === 0) return;
 
-    // Flatten cart items into a string suitable for EmailJS
+    // Build HTML string for cart items
     const cartItemsPreview = cartItems
       .map(
-        (item) => `${item.title} | $${item.price.toFixed(2)} | ${item.quantity}`
+        (item) =>
+          `<tr>
+        <td style="border: 1px solid #ddd; padding: 8px; text-align: left;">${
+          item.title
+        }</td>
+        <td style="border: 1px solid #ddd; padding: 8px; text-align: right;">$${item.price.toFixed(
+          2
+        )}</td>
+        <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${
+          item.quantity
+        }</td>
+      </tr>`
       )
-      .join("\n");
-
+      .join("");
     const templateParams = {
       to_name: customerName,
       to_email: customerEmail,
@@ -39,12 +49,8 @@ const EmailService: React.FC<EmailServiceProps> = ({
         templateParams,
         "Yz6eYBhmSsLR84IUh"
       )
-      .then(() => {
-        console.log("Email sent successfully!");
-      })
-      .catch((err) => {
-        console.error("Failed to send email:", err);
-      });
+      .then(() => console.log("Email sent successfully!"))
+      .catch((err) => console.error("Failed to send email:", err));
   }, [customerName, customerEmail, cartItems, total]);
 
   return null;

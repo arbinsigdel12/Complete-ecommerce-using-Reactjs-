@@ -6,6 +6,7 @@ import SearchResultsDropdown from "../searchresultsdropdown/SearchResultsDropdow
 import type { Product } from "../../type/Product";
 import type { RootState } from "../../store";
 import { useSelector } from "react-redux";
+import useDebounce from "../../hooks/useDebounce";
 interface NavbarSearchProps {
   isMobile?: boolean;
   onSearch?: (query: string, category: string) => void;
@@ -21,6 +22,7 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({
   const navigate = useNavigate();
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [dropdownWidth, setDropdownWidth] = useState<number>(0);
@@ -30,22 +32,37 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({
   const searchSelectSpanRef = useRef<HTMLSpanElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (searchQuery.trim() === "") {
-      setFilteredProducts([]);
-    } else {
+  const [isSearchLoading, setIsSearchLoading] = useState(false);
+
+  const searchProduct = useCallback(
+    function searchProduct(query: string) {
       const filtered = product.data.filter((p) => {
         const matchesQuery = p.title
           .toLowerCase()
-          .includes(searchQuery.toLowerCase());
+          .includes(query.toLowerCase());
         const matchesCategory =
           selectedCategory === "All" ||
           p.category.toLowerCase() === selectedCategory.toLowerCase();
         return matchesQuery && matchesCategory;
       });
-      setFilteredProducts(filtered.slice(0, 5));
+      return filtered;
+    },
+    [product.data, selectedCategory]
+  );
+
+  useEffect(() => {
+    if (debouncedSearchQuery.trim() === "") {
+      setFilteredProducts([]);
+    } else {
+      const res = searchProduct(debouncedSearchQuery);
+      setFilteredProducts(res.slice(0, 5));
+      setIsSearchLoading(false);
     }
-  }, [searchQuery, selectedCategory, product]);
+  }, [searchProduct, debouncedSearchQuery]);
+
+  useEffect(() => {
+    if (searchQuery) setIsSearchLoading(true);
+  }, [searchQuery]);
 
   const adjustSelectWidth = useCallback(() => {
     const select = selectRef.current;
@@ -94,7 +111,7 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({
 
   const handleSearchClick = () => {
     if (filteredProducts.length > 0) {
-      navigate(`/product/${filteredProducts[0].id}`);
+      navigate(`/products/${filteredProducts[0].id}`);
       resetSearchState();
       return;
     }
@@ -102,7 +119,7 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({
       const matched = product.data.find((p) =>
         p.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
-      if (matched) navigate(`/product/${matched.id}`);
+      if (matched) navigate(`/products/${matched.id}`);
       resetSearchState();
     }
   };
@@ -110,12 +127,12 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       if (filteredProducts.length > 0) {
-        navigate(`/product/${filteredProducts[0].id}`);
+        navigate(`/products/${filteredProducts[0].id}`);
       } else if (searchQuery.trim()) {
         const matched = product.data.find((p) =>
           p.title.toLowerCase().includes(searchQuery.toLowerCase())
         );
-        if (matched) navigate(`/product/${matched.id}`);
+        if (matched) navigate(`/products/${matched.id}`);
       }
       resetSearchState();
     } else if (e.key === "Escape") {
@@ -124,7 +141,7 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({
   };
 
   const handleProductClick = (productId: number) => {
-    navigate(`/product/${productId}`);
+    navigate(`/products/${productId}`);
     resetSearchState();
   };
 
@@ -189,6 +206,7 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({
           onClose={resetSearchState}
           width={dropdownWidth}
           left={dropdownLeft}
+          isSearchLoading={isSearchLoading}
         />
       </div>
     </>
