@@ -26,7 +26,7 @@ const CartItem: React.FC<CartItemProps> = ({
       <img
         src={item.image}
         alt={item.title}
-        onClick={() => navigate(`/product/${item.id}`)}
+        onClick={() => navigate(`/products/${item.id}`)}
         style={{ cursor: "pointer" }}
       />
       {isOutOfStock && <div className="out-of-stock-badge">Out of Stock</div>}

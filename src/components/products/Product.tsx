@@ -26,7 +26,7 @@ const ProductItem: React.FC<{ product: Product }> = ({ product }) => {
   };
 
   return (
-    <Link to={`/product/${product.id}`} className="product-card">
+    <Link to={`/products/${product.id}`} className="product-card">
       <div className="product-content">
         <img src={product.image} alt={product.title} />
         {isOutOfStock && (

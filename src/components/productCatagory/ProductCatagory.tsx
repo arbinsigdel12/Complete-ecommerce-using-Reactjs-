@@ -22,12 +22,12 @@ const categories: ProductCategoryProps[] = [
   {
     title: "Men's Clothing",
     image: "/assets/Images/productcatagory/mensclothing.webp",
-    url: "/category/mensclothing",
+    url: "/category/men's clothing",
   },
   {
     title: "Women's Clothing",
     image: "/assets/Images/productcatagory/womensclothing.webp",
-    url: "/category/womensclothing",
+    url: "/category/women's clothing",
   },
 ];
 
